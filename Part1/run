@@ -143,7 +143,7 @@ def main():
                 # create the command string
                 line = line.strip()
 
-                if (node_ver == "v18.14.0" or node_ver == "v19.7.0"):
+                if (node_ver == "v18.14.0" or node_ver == "v19.7.0" or node_ver == "v18.13.0"):
                     command = f"node src/main.js {line}"
                 else:
                     command = f"bin/bin/node src/main.js {line}"
