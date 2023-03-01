@@ -1,2 +1,103 @@
-- name: Deploy to App Engine
+name: Deploy to App Engine
   uses: google-github-actions/deploy-appengine@v1.1.0
+
+
+name: 'Deploy to App Engine'
+author: 'Google LLC'
+description: |-
+  Deploy and promote a new service to Google App Engine.
+inputs:
+  project_id:
+    description: |-
+      The Google Cloud Project ID. If unspecified, it is inherited from the
+      environment.
+    required: true
+
+  working_directory:
+    description: |-
+      The path to set the working directory. The deliverables will be referenced
+      from this path.
+    required: false
+
+  deliverables:
+    description: |-
+      The yaml files for the services or configurations you want to deploy.
+      If not given, defaults to app.yaml in the current directory. If that is
+      not found, attempts to automatically generate necessary configuration
+      files (such as app.yaml) in the current directory.
+    required: false
+
+  image_url:
+    description: |-
+      Deploy with a specific container image. The image URL must be from one of
+      the valid GCR host names.
+    required: false
+
+  version:
+    description: |-
+      The version of the app that will be created or replaced by this
+      deployment. If you do not specify a version, one will be generated for
+      you.
+    required: false
+
+  promote:
+    description: |-
+      Promote the deployed version to receive all traffic.
+    required: false
+    default: "true"
+
+  flags:
+    description: |-
+      Space separated list of other App Engine flags, examples can be found:
+      https://cloud.google.com/sdk/gcloud/reference/app/deploy#FLAGS. Ex
+      --service-account=my-account@project.iam.gserviceaccount.com --no-cache
+    required: false
+
+  gcloud_version:
+    description: |-
+      Version of the Cloud SDK to install. If unspecified or set to "latest",
+      the latest available gcloud SDK version for the target platform will be
+      installed. Example: "290.0.1".
+    required: false
+
+  gcloud_component:
+    description: |-
+      Version of the Cloud SDK components to install and use. If unspecified,
+      the latest or released version will be used. This is the equivalent of
+      running 'gcloud alpha COMMAND' or 'gcloud beta COMMAND'. Valid values are
+      `alpha` or `beta`. The default value is to use the stable track.
+    required: false
+
+outputs:
+  name:
+    description: |-
+      The fully-qualified resource name of the deployment. This will be of the
+      format "apps/<project>/services/<service>/versions/<version>".
+  runtime:
+    description: |-
+      The computed deployment runtime.
+  service_account_email:
+    description: |-
+      The email address of the runtime service account.
+  serving_status:
+    description: |-
+      The current serving status. The value is usually "SERVING", unless the
+      deployment failed to start.
+  version_id:
+    description: |-
+      Unique identifier for the version, or the specified version if one was
+      given.
+  version_url:
+    description: |-
+      URL of the version of the AppEngine service that was deployed.
+  url:
+    description: |-
+      DEPRECATED: Use "version_url" instead. URL of the version of the AppEngine
+      service that was deployed.
+branding:
+  icon: 'code'
+  color: 'blue'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
