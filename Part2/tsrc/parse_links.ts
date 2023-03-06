@@ -6,6 +6,7 @@ import { Octokit as OctokitType } from "octokit";
 const Octokit = OctokitType as any;
 import { provider } from "./logging";
 import { Logger } from "typescript-logging-log4ts-style";
+import {Version} from "./package_class";
 
 // GraphQL query to get the number of commits in the last year
 
@@ -157,9 +158,41 @@ export async function graphAPIfetch(
     let data3 = JSON.parse(data2);
     package_test.num_dev = data3.data.repository.assignableUsers.totalCount;
 
-    //Test Code
-    const dependencies = data3.data.repository.object.text;
-    log.info("Dependencies" + dependencies);
+
+    //New additions to code for version Pinning
+    const packageJson = JSON.parse(data3.data.repository.object.text);
+    const versionString = packageJson.version.match(/^\d+\.\d+\.\d+/);
+    const version: Version = {
+      major: parseInt(versionString[0].split(".")[0]),
+      minor: parseInt(versionString[0].split(".")[1]),
+      patch: parseInt(versionString[0].split(".")[2])
+    };
+    const devDependencies: {[key: string]: Version} = {};
+    
+    for (const key in packageJson.devDependencies) {
+      const match = packageJson.devDependencies[key].match(/^\^?\d+\.\d+\.\d+(-\w+\.\d+)?/);
+      if (match) {
+        const versionString = match[0].replace(/^\^/, '');
+        const [major, minor, patch] = versionString.split('.').map(Number);
+        devDependencies[key] = {
+          major: parseInt(major),
+          minor: parseInt(minor),
+          patch: parseInt(patch)
+        };
+      }
+    }
+
+    package_test.version = version;
+    package_test.devDependencies = devDependencies;
+
+    //Debug
+    log.info("Version:", package_test.version);
+    log.info("Dev dependencies:");
+
+    for(const key in package_test.devDependencies) {
+      log.info("", package_test.devDependencies[key]);
+    }
+    
 
     // Check if the repo has issues enabled
     if (data3.data.repository.hasIssuesEnabled == true) {
@@ -310,4 +343,15 @@ export function gql_query(username: string, repo: string) {
     }
   }
   `;
+}
+
+// Extract the version number from a dependency string in the format "^X.X.X"
+function extractVersion(versionString: string): string {
+  return versionString.replace("^", "");
+}
+
+// Parse the version string into a Version object
+function parseVersion(versionString: string): Version {
+  const [major, minor, patch] = versionString.split(".");
+  return { major: Number(major), minor: Number(minor), patch: Number(patch) };
 }

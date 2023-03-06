@@ -1,6 +1,12 @@
 /* Package class module
  * initialized then passed to the APIs to have data loaded to it and then used by the Runner to calculate score
  */
+export interface Version {
+  major: number;
+  minor: number;
+  patch: number;
+}
+
 export class Package {
   correctness: number;
   bus_factor: number;
@@ -30,6 +36,11 @@ export class Package {
   has_license_file: Promise<boolean>;
   has_license_in_package_json: Promise<boolean>;
   has_correct_license_in_readme: Promise<boolean>;
+
+  //New additions for version pinning
+  version: Version;
+  devDependencies: {[key: string]: Version};
+
 
   constructor(URL: string = "", repo = "", owner = "github", token = "") {
     this.correctness = 0;
@@ -64,5 +75,9 @@ export class Package {
     this.has_license_in_readme = new Promise<boolean>((value) => {});
     this.has_license_in_package_json = new Promise<boolean>((value) => {});
     this.has_correct_license_in_readme = new Promise<boolean>((value) => {});
+
+    //Constructor for new additions
+    this.version = { major: 0, minor: 0, patch: 0 };
+    this.devDependencies = {};
   }
 }

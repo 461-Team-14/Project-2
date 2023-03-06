@@ -1,9 +1,6 @@
 "use strict";
 exports.__esModule = true;
 exports.Package = void 0;
-/* Package class module
- * initialized then passed to the APIs to have data loaded to it and then used by the Runner to calculate score
- */
 var Package = /** @class */ (function () {
     function Package(URL, repo, owner, token) {
         if (URL === void 0) { URL = ""; }
@@ -42,6 +39,9 @@ var Package = /** @class */ (function () {
         this.has_license_in_readme = new Promise(function (value) { });
         this.has_license_in_package_json = new Promise(function (value) { });
         this.has_correct_license_in_readme = new Promise(function (value) { });
+        //Constructor for new additions
+        this.version = { major: 0, minor: 0, patch: 0 };
+        this.devDependencies = {};
     }
     return Package;
 }());

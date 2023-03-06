@@ -151,14 +151,14 @@ function getGitRepoDetails(url) {
 exports.getGitRepoDetails = getGitRepoDetails;
 function graphAPIfetch(gql_query, package_test) {
     return __awaiter(this, void 0, void 0, function () {
-        var log, response, data, data2, data3, dependencies, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var log, response, data, data2, data3, packageJson, versionString, version, devDependencies, key, match, versionString_1, _a, major, minor, patch, key, error_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     log = logging_1.provider.getLogger("GraphQL.graphAPIfetch");
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 4, , 5]);
+                    _b.trys.push([1, 4, , 5]);
                     // Fetch the GraphQL API
                     log.info("Getting graphQL response...");
                     return [4 /*yield*/, fetch("https://api.github.com/graphql", {
@@ -169,16 +169,42 @@ function graphAPIfetch(gql_query, package_test) {
                             body: JSON.stringify({ query: gql_query })
                         })];
                 case 2:
-                    response = _a.sent();
+                    response = _b.sent();
                     return [4 /*yield*/, response.json()];
                 case 3:
-                    data = _a.sent();
+                    data = _b.sent();
                     log.info("Data acquired from graphQL: " + data);
                     data2 = JSON.stringify(data);
                     data3 = JSON.parse(data2);
                     package_test.num_dev = data3.data.repository.assignableUsers.totalCount;
-                    dependencies = data3.data.repository.object.text;
-                    log.info("Dependencies" + dependencies);
+                    packageJson = JSON.parse(data3.data.repository.object.text);
+                    versionString = packageJson.version.match(/^\d+\.\d+\.\d+/);
+                    version = {
+                        major: parseInt(versionString[0].split(".")[0]),
+                        minor: parseInt(versionString[0].split(".")[1]),
+                        patch: parseInt(versionString[0].split(".")[2])
+                    };
+                    devDependencies = {};
+                    for (key in packageJson.devDependencies) {
+                        match = packageJson.devDependencies[key].match(/^\^?\d+\.\d+\.\d+(-\w+\.\d+)?/);
+                        if (match) {
+                            versionString_1 = match[0].replace(/^\^/, '');
+                            _a = versionString_1.split('.').map(Number), major = _a[0], minor = _a[1], patch = _a[2];
+                            devDependencies[key] = {
+                                major: parseInt(major),
+                                minor: parseInt(minor),
+                                patch: parseInt(patch)
+                            };
+                        }
+                    }
+                    package_test.version = version;
+                    package_test.devDependencies = devDependencies;
+                    //Debug
+                    log.info("Version:", package_test.version);
+                    log.info("Dev dependencies:");
+                    for (key in package_test.devDependencies) {
+                        log.info("", package_test.devDependencies[key]);
+                    }
                     // Check if the repo has issues enabled
                     if (data3.data.repository.hasIssuesEnabled == true) {
                         // If so, get the number of open issues
@@ -221,7 +247,7 @@ function graphAPIfetch(gql_query, package_test) {
                     }
                     return [2 /*return*/, data];
                 case 4:
-                    error_2 = _a.sent();
+                    error_2 = _b.sent();
                     log.debug("graphQL API failed with error: " + error_2);
                     return [3 /*break*/, 5];
                 case 5: return [2 /*return*/];
@@ -290,3 +316,12 @@ function gql_query(username, repo) {
     return "\n  {\n    repository(owner: \"".concat(username, "\", name: \"").concat(repo, "\") {\n      name\n      forkCount\n      licenseInfo {\n        name\n      }\n      assignableUsers {\n        totalCount\n      }\n      sshUrl\n      latestRelease {\n        tagName\n      }\n      hasIssuesEnabled\n      issues {\n        totalCount\n      }\n      open_issues: issues(states: OPEN) {\n        totalCount\n      }\n      defaultBranchRef {\n        target {\n          ... on Commit {\n            history {\n              totalCount\n            }\n          }\n        }\n      }\n      pullRequests {\n        totalCount\n      }\n      \n      last_pushed_at: pushedAt\n      \n      stargazerCount\n      hasVulnerabilityAlertsEnabled\n      \n      object(expression: \"HEAD:package.json\") {\n        ... on Blob {\n          text\n        }\n      }\n    }\n  }\n  ");
 }
 exports.gql_query = gql_query;
+// Extract the version number from a dependency string in the format "^X.X.X"
+function extractVersion(versionString) {
+    return versionString.replace("^", "");
+}
+// Parse the version string into a Version object
+function parseVersion(versionString) {
+    var _a = versionString.split("."), major = _a[0], minor = _a[1], patch = _a[2];
+    return { major: Number(major), minor: Number(minor), patch: Number(patch) };
+}
