@@ -344,14 +344,3 @@ export function gql_query(username: string, repo: string) {
   }
   `;
 }
-
-// Extract the version number from a dependency string in the format "^X.X.X"
-function extractVersion(versionString: string): string {
-  return versionString.replace("^", "");
-}
-
-// Parse the version string into a Version object
-function parseVersion(versionString: string): Version {
-  const [major, minor, patch] = versionString.split(".");
-  return { major: Number(major), minor: Number(minor), patch: Number(patch) };
-}
