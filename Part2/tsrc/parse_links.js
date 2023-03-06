@@ -151,7 +151,7 @@ function getGitRepoDetails(url) {
 exports.getGitRepoDetails = getGitRepoDetails;
 function graphAPIfetch(gql_query, package_test) {
     return __awaiter(this, void 0, void 0, function () {
-        var log, response, data, data2, data3, packageJson, versionString, version, devDependencies, key, match, versionString_1, _a, major, minor, patch, key, error_2;
+        var log, response, data, data2, data3, packageJson, versionString, version, devDependencies, key, match, versionString_1, _a, major, minor, patch, error_2;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -201,10 +201,7 @@ function graphAPIfetch(gql_query, package_test) {
                     package_test.devDependencies = devDependencies;
                     //Debug
                     log.info("Version:", package_test.version);
-                    log.info("Dev dependencies:");
-                    for (key in package_test.devDependencies) {
-                        log.info("", package_test.devDependencies[key]);
-                    }
+                    log.info("Dev dependencies:", package_test.devDependencies);
                     // Check if the repo has issues enabled
                     if (data3.data.repository.hasIssuesEnabled == true) {
                         // If so, get the number of open issues
@@ -316,12 +313,3 @@ function gql_query(username, repo) {
     return "\n  {\n    repository(owner: \"".concat(username, "\", name: \"").concat(repo, "\") {\n      name\n      forkCount\n      licenseInfo {\n        name\n      }\n      assignableUsers {\n        totalCount\n      }\n      sshUrl\n      latestRelease {\n        tagName\n      }\n      hasIssuesEnabled\n      issues {\n        totalCount\n      }\n      open_issues: issues(states: OPEN) {\n        totalCount\n      }\n      defaultBranchRef {\n        target {\n          ... on Commit {\n            history {\n              totalCount\n            }\n          }\n        }\n      }\n      pullRequests {\n        totalCount\n      }\n      \n      last_pushed_at: pushedAt\n      \n      stargazerCount\n      hasVulnerabilityAlertsEnabled\n      \n      object(expression: \"HEAD:package.json\") {\n        ... on Blob {\n          text\n        }\n      }\n    }\n  }\n  ");
 }
 exports.gql_query = gql_query;
-// Extract the version number from a dependency string in the format "^X.X.X"
-function extractVersion(versionString) {
-    return versionString.replace("^", "");
-}
-// Parse the version string into a Version object
-function parseVersion(versionString) {
-    var _a = versionString.split("."), major = _a[0], minor = _a[1], patch = _a[2];
-    return { major: Number(major), minor: Number(minor), patch: Number(patch) };
-}
