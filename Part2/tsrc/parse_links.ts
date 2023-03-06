@@ -184,10 +184,6 @@ export async function graphAPIfetch(
 
     package_test.version = version;
     package_test.devDependencies = devDependencies;
-
-    //Debug
-    log.info("Version:", package_test.version);
-    log.info("Dev dependencies:", package_test.devDependencies);
     
 
     // Check if the repo has issues enabled
