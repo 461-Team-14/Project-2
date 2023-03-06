@@ -1,61 +1,61 @@
-2023-03-06 01:47:29,145 INFO  [Main.start] Running command -> node src/main.js https://github.com/lodash/lodash
-2023-03-06 01:47:29,145 INFO  [Main.start] Scoring package from: https://github.com/lodash/lodash
-2023-03-06 01:47:29,145 INFO  [Main.start] Parsing repository link...
-2023-03-06 01:47:29,146 INFO  [URLParse.getGitRepoDetails] Getting info from GitHub link...
-2023-03-06 01:47:29,146 INFO  [URLParse.getGitRepoDetails] getGitRepoDetails returns lodash/lodash
-2023-03-06 01:47:29,146 INFO  [Main.start] Getting info from graphQL query
-2023-03-06 01:47:29,146 INFO  [GraphQL.graphAPIfetch] Getting graphQL response...
-2023-03-06 01:47:29,556 INFO  [GraphQL.graphAPIfetch] Data acquired from graphQL: [object Object]
-2023-03-06 01:47:29,557 INFO  [GraphQL.graphAPIfetch] Version: [{"major":5,"minor":0,"patch":0}]
-2023-03-06 01:47:29,557 INFO  [GraphQL.graphAPIfetch] Dev dependencies:
-2023-03-06 01:47:29,557 INFO  [GraphQL.graphAPIfetch]  [{"major":5,"minor":2,"patch":0}]
-2023-03-06 01:47:29,557 INFO  [GraphQL.graphAPIfetch]  [{"major":7,"minor":16,"patch":0}]
-2023-03-06 01:47:29,558 INFO  [GraphQL.graphAPIfetch]  [{"major":2,"minor":22,"patch":1}]
-2023-03-06 01:47:29,558 INFO  [GraphQL.graphAPIfetch]  [{"major":4,"minor":17,"patch":20}]
-2023-03-06 01:47:29,558 INFO  [GraphQL.graphAPIfetch]  [{"major":3,"minor":2,"patch":25}]
-2023-03-06 01:47:29,558 INFO  [Main.start] Successful data collection: [object Object]
-2023-03-06 01:47:29,558 INFO  [Main.start] Getting info from cloned repo...
-2023-03-06 01:47:29,559 INFO  [Cloned.get_info_from_cloned_repo] Cloning repo and getting information about it
-2023-03-06 01:47:29,560 INFO  [Cloned.create_git_object] Created repository directory
-2023-03-06 01:47:29,561 INFO  [Cloned.create_git_object] Successfully created git object
-2023-03-06 01:47:29,562 INFO  [Cloned.clone_repo] Cloning repo...
-2023-03-06 01:47:55,953 INFO  [Cloned.clone_repo] Successfully cloned repo
-2023-03-06 01:47:55,953 INFO  [Cloned.get_readme_path] Found readme file for repository: /workspaces/typescript-node-2/Project-2/Part2/lodash/README.md
-2023-03-06 01:47:55,953 INFO  [Cloned.read_readme] Reading contents of Readme
-2023-03-06 01:47:55,954 INFO  [Cloned.get_percentage_comments] Running cloc on cloned repository
-2023-03-06 01:47:55,957 DEBUG [Cloned.get_percentage_comments] Error in running cloc command
-2023-03-06 01:47:55,958 INFO  [Cloned.has_license_file] License file found for respoitory: LICENSE
-2023-03-06 01:47:55,958 INFO  [Cloned.has_license_file] License file not found for repository in /workspaces/typescript-node-2/Project-2/Part2/lodash
-2023-03-06 01:47:55,958 INFO  [Cloned.has_license_in_package_json] Read package.json file
-2023-03-06 01:47:55,958 INFO  [Cloned.has_license_in_package_json] Found license in package.json
-2023-03-06 01:47:55,958 INFO  [Cloned.get_repo] Removing repository
-2023-03-06 01:47:55,959 INFO  [REST.get_recentCommits] Entering while loop to get recent commits
-2023-03-06 01:47:55,959 INFO  [REST.get_recentCommits] Getting recent commits
-2023-03-06 01:47:55,959 INFO  [Cloned.has_correct_license_in_readme] Found license MIT in readme
-2023-03-06 01:47:56,171 INFO  [REST.get_recentCommits] Found commit count of 0
-2023-03-06 01:47:56,171 INFO  [Scores.calculate_correctness] Getting commit count...
-2023-03-06 01:47:56,171 INFO  [Scores.calculate_correctness] Getting number of stars...
-2023-03-06 01:47:56,171 INFO  [Scores.calculate_correctness] Calculated num_stars: 1 and commit_count: 0
-2023-03-06 01:47:56,171 INFO  [Scores.calculate_correctness] Calculating correctness...
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_correctness] Calculated correctness score of 0.26
-2023-03-06 01:47:56,172 INFO  [Main.start] calculating responsiveness
-2023-03-06 01:47:56,172 INFO  [Main.start] calculating correctness
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_ramp] Calculate ramp up time
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_ramp] Calculated ramp up score of 0.13
-2023-03-06 01:47:56,172 INFO  [Main.start] calculating ramp-up
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_responsiveness] Calculating responsiveness
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_license] Calculating license
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_license] License score is 1 based on condition (1) (check function for more information)
-2023-03-06 01:47:56,172 INFO  [Main.start] calculating license
-2023-03-06 01:47:56,172 INFO  [Scores.calculate_responsiveness] Calculated responsiveness of 1
-2023-03-06 01:47:56,173 INFO  [Scores.calculate_bus] Calculated bus factor score of 1
-2023-03-06 01:47:56,173 INFO  [Scores.calculate_score] Calculating final score...
-2023-03-06 01:47:56,173 INFO  [Main.start] calculating bus factor
-2023-03-06 01:47:56,173 INFO  [Scores.calculate_score] Final score for package lodash = 0.77
-2023-03-06 01:47:56,173 INFO  [Main.start] calculating final score
-2023-03-06 01:47:56,173 INFO  [Main.start] Correctness 0.26
-2023-03-06 01:47:56,173 INFO  [Main.start] Ramp-up 0.13
-2023-03-06 01:47:56,173 INFO  [Main.start] License Score 1
-2023-03-06 01:47:56,173 INFO  [Main.start] Bus Factor 1
-2023-03-06 01:47:56,173 INFO  [Main.start] Responsiveness 1
-2023-03-06 01:47:56,173 INFO  [Main.start] Total Score 0.77
+2023-03-06 01:50:04,807 INFO  [Main.start] Running command -> node src/main.js https://github.com/lodash/lodash
+2023-03-06 01:50:04,808 INFO  [Main.start] Scoring package from: https://github.com/lodash/lodash
+2023-03-06 01:50:04,808 INFO  [Main.start] Parsing repository link...
+2023-03-06 01:50:04,808 INFO  [URLParse.getGitRepoDetails] Getting info from GitHub link...
+2023-03-06 01:50:04,808 INFO  [URLParse.getGitRepoDetails] getGitRepoDetails returns lodash/lodash
+2023-03-06 01:50:04,808 INFO  [Main.start] Getting info from graphQL query
+2023-03-06 01:50:04,808 INFO  [GraphQL.graphAPIfetch] Getting graphQL response...
+2023-03-06 01:50:05,583 INFO  [GraphQL.graphAPIfetch] Data acquired from graphQL: [object Object]
+2023-03-06 01:50:05,584 INFO  [GraphQL.graphAPIfetch] Version: [{"major":5,"minor":0,"patch":0}]
+2023-03-06 01:50:05,584 INFO  [GraphQL.graphAPIfetch] Dev dependencies:
+2023-03-06 01:50:05,584 INFO  [GraphQL.graphAPIfetch]  [{"major":5,"minor":2,"patch":0}]
+2023-03-06 01:50:05,585 INFO  [GraphQL.graphAPIfetch]  [{"major":7,"minor":16,"patch":0}]
+2023-03-06 01:50:05,585 INFO  [GraphQL.graphAPIfetch]  [{"major":2,"minor":22,"patch":1}]
+2023-03-06 01:50:05,585 INFO  [GraphQL.graphAPIfetch]  [{"major":4,"minor":17,"patch":20}]
+2023-03-06 01:50:05,585 INFO  [GraphQL.graphAPIfetch]  [{"major":3,"minor":2,"patch":25}]
+2023-03-06 01:50:05,585 INFO  [Main.start] Successful data collection: [object Object]
+2023-03-06 01:50:05,585 INFO  [Main.start] Getting info from cloned repo...
+2023-03-06 01:50:05,586 INFO  [Cloned.get_info_from_cloned_repo] Cloning repo and getting information about it
+2023-03-06 01:50:05,587 INFO  [Cloned.create_git_object] Created repository directory
+2023-03-06 01:50:05,588 INFO  [Cloned.create_git_object] Successfully created git object
+2023-03-06 01:50:05,588 INFO  [Cloned.clone_repo] Cloning repo...
+2023-03-06 01:50:27,408 INFO  [Cloned.clone_repo] Successfully cloned repo
+2023-03-06 01:50:27,413 INFO  [Cloned.get_percentage_comments] Running cloc on cloned repository
+2023-03-06 01:50:27,435 DEBUG [Cloned.get_percentage_comments] Error in running cloc command
+2023-03-06 01:50:27,436 INFO  [Cloned.has_license_file] License file found for respoitory: LICENSE
+2023-03-06 01:50:27,436 INFO  [Cloned.has_license_file] License file not found for repository in /workspaces/typescript-node-2/Project-2/Part2/lodash
+2023-03-06 01:50:27,436 INFO  [Cloned.has_license_in_package_json] Read package.json file
+2023-03-06 01:50:27,437 INFO  [Cloned.has_license_in_package_json] Found license in package.json
+2023-03-06 01:50:27,438 INFO  [Cloned.get_repo] Removing repository
+2023-03-06 01:50:27,411 INFO  [Cloned.get_readme_path] Found readme file for repository: /workspaces/typescript-node-2/Project-2/Part2/lodash/README.md
+2023-03-06 01:50:27,411 INFO  [Cloned.read_readme] Reading contents of Readme
+2023-03-06 01:50:27,445 INFO  [REST.get_recentCommits] Entering while loop to get recent commits
+2023-03-06 01:50:27,445 INFO  [REST.get_recentCommits] Getting recent commits
+2023-03-06 01:50:27,445 INFO  [Cloned.has_correct_license_in_readme] Found license MIT in readme
+2023-03-06 01:50:27,782 INFO  [REST.get_recentCommits] Found commit count of 0
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_correctness] Getting commit count...
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_correctness] Getting number of stars...
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_correctness] Calculated num_stars: 1 and commit_count: 0
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_correctness] Calculating correctness...
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_correctness] Calculated correctness score of 0.26
+2023-03-06 01:50:27,783 INFO  [Main.start] calculating correctness
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_responsiveness] Calculating responsiveness
+2023-03-06 01:50:27,783 INFO  [Scores.calculate_responsiveness] Calculated responsiveness of 1
+2023-03-06 01:50:27,783 INFO  [Main.start] calculating responsiveness
+2023-03-06 01:50:27,784 INFO  [Scores.calculate_ramp] Calculate ramp up time
+2023-03-06 01:50:27,784 INFO  [Scores.calculate_ramp] Calculated ramp up score of 0.13
+2023-03-06 01:50:27,786 INFO  [Main.start] calculating ramp-up
+2023-03-06 01:50:27,787 INFO  [Scores.calculate_license] Calculating license
+2023-03-06 01:50:27,787 INFO  [Scores.calculate_license] License score is 1 based on condition (1) (check function for more information)
+2023-03-06 01:50:27,787 INFO  [Main.start] calculating license
+2023-03-06 01:50:27,787 INFO  [Scores.calculate_bus] Calculated bus factor score of 1
+2023-03-06 01:50:27,787 INFO  [Main.start] calculating bus factor
+2023-03-06 01:50:27,787 INFO  [Scores.calculate_score] Calculating final score...
+2023-03-06 01:50:27,787 INFO  [Scores.calculate_score] Final score for package lodash = 0.77
+2023-03-06 01:50:27,787 INFO  [Main.start] calculating final score
+2023-03-06 01:50:27,787 INFO  [Main.start] Correctness 0.26
+2023-03-06 01:50:27,787 INFO  [Main.start] Ramp-up 0.13
+2023-03-06 01:50:27,787 INFO  [Main.start] License Score 1
+2023-03-06 01:50:27,787 INFO  [Main.start] Bus Factor 1
+2023-03-06 01:50:27,787 INFO  [Main.start] Responsiveness 1
+2023-03-06 01:50:27,787 INFO  [Main.start] Total Score 0.77
