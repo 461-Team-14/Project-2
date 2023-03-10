@@ -23,8 +23,9 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
+        working-directory: Part2
         node-version: 16
         cache: 'npm'
-        cache-dependency-path: Part2/package-lock.json
-    - run: npm ci
+        cache-dependency-path: 3package-lock.json
+    - run: npm install
     - run: npm test
