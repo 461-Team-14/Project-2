@@ -55,7 +55,7 @@ exports.packageByNameGet = function(name,xAuthorization) {
     "ID" : "ID",
     "Name" : "Name"
   },
-  "Date" : "2000-01-23T04:56:07.000+00:00"
+  "Date" : "2023-03-23T23:11:15Z"
 }, {
   "Action" : "CREATE",
   "User" : {
@@ -67,7 +67,7 @@ exports.packageByNameGet = function(name,xAuthorization) {
     "ID" : "ID",
     "Name" : "Name"
   },
-  "Date" : "2000-01-23T04:56:07.000+00:00"
+  "Date" : "2023-03-23T23:11:15Z"
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
