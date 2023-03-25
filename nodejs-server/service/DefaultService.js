@@ -1,5 +1,6 @@
 'use strict';
-
+const jwt = require('jsonwebtoken');
+const UserHandler = require('./UserHandler');
 
 /**
  * Create an access token.
@@ -9,15 +10,46 @@
  **/
 exports.createAuthToken = function(body) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = "";
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+    //Check that the request body has the required structure
+    if (!body || !body.User || !body.Secret || !body.User.name || !body.Secret.password) {
+      reject({ status: 400, error: 'AuthenticationRequest is missing field(s) or is formed improperly.' });
+      return;
+    }
+
+    /**
+     * Get the user name, 
+     * isAdmin flag, 
+     * and password from the request body
+     **/
+    const { name, isAdmin } = body.User;
+    const { password } = body.Secret;
+
+    //Check if the user exists in the user list
+    const user = UserHandler.userList.find(u => u.name === name && u.password === password);
+    if (!user) {
+      const addUserResult = UserHandler.addUser(name, isAdmin, password);
+      switch(addUserResult) {
+        case -1:
+          reject({ status: 400, error: 'There is missing field(s) in the AuthenticationRequest or it is formed improperly.' });
+          break;
+        case -2:
+          reject({ status: 401, error: 'The user or password is invalid.' });
+          break;
+        case 1:
+          //Generate a new JWT
+          const token = jwt.sign({ name, isAdmin }, 'secret');
+          //Return the JWT as a JSON object
+          resolve({ status: 200, token });
+          break;
+      }
     } else {
-      resolve();
+      //Generate a new JWT
+      const token = jwt.sign({ name, isAdmin }, 'secret');
+      //Return the JWT as a JSON object
+      resolve({ status: 200, token });
     }
   });
-}
+};
 
 
 /**

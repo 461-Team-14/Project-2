@@ -3,13 +3,14 @@
 var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService.js');
 
-module.exports.createAuthToken = function createAuthToken (req, res, next, body) {
+module.exports.CreateAuthToken = function createAuthToken (req, res, next, body) {
   Default.createAuthToken(body)
     .then(function (response) {
+      res.setHeader('X-Authorization', response.token);
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response.status || 500, response);
     });
 };
 
