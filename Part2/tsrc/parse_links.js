@@ -199,9 +199,6 @@ function graphAPIfetch(gql_query, package_test) {
                     }
                     package_test.version = version;
                     package_test.devDependencies = devDependencies;
-                    //Debug
-                    log.info("Version:", package_test.version);
-                    log.info("Dev dependencies:", package_test.devDependencies);
                     // Check if the repo has issues enabled
                     if (data3.data.repository.hasIssuesEnabled == true) {
                         // If so, get the number of open issues
