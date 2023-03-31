@@ -104,12 +104,13 @@ module.exports.packagesList = function packagesList (req, res, next, body, offse
     });
 };
 
-module.exports.registryReset = function registryReset (req, res, next, xAuthorization) {
+module.exports.RegistryReset = function registryReset (req, res, next) {
+  const xAuthorization = req.headers['x-authorization']; // Extract token from request header
   Default.registryReset(xAuthorization)
     .then(function (response) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response.status || 500, response);
     });
 };

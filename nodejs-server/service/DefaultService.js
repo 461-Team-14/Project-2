@@ -10,47 +10,47 @@ const UserHandler = require('./UserHandler');
  **/
 exports.createAuthToken = function(body) {
   return new Promise(function(resolve, reject) {
-    //Check that the request body has the required structure
     if (!body || !body.User || !body.Secret || !body.User.name || !body.Secret.password) {
       reject({ status: 400, error: 'AuthenticationRequest is missing field(s) or is formed improperly.' });
       return;
     }
 
-    /**
-     * Get the user name, 
-     * isAdmin flag, 
-     * and password from the request body
-     **/
     const { name, isAdmin } = body.User;
     const { password } = body.Secret;
 
-    //Check if the user exists in the user list
     const user = UserHandler.userList.find(u => u.name === name && u.password === password);
     if (!user) {
       const addUserResult = UserHandler.addUser(name, isAdmin, password);
       switch(addUserResult) {
         case -1:
-          reject({ status: 400, error: 'There is missing field(s) in the AuthenticationRequest or it is formed improperly.' });
+          reject({ status: 400, error: 'AuthenticationRequest is missing field(s) or is formed improperly.' });
           break;
         case -2:
           reject({ status: 401, error: 'The user or password is invalid.' });
           break;
         case 1:
-          //Generate a new JWT
-          const token = jwt.sign({ name, isAdmin }, 'secret');
-          //Return the JWT as a JSON object
-          resolve({ status: 200, token });
+          const existingUser = UserHandler.userList.find(u => u.name === name && u.password === password);
+          if (existingUser.token) {
+            resolve({ status: 200, token: existingUser.token });
+          } else {
+            const token = jwt.sign({ name, isAdmin }, 'secret');
+            existingUser.token = token;
+            resolve({ status: 200, token });
+          }
           break;
       }
     } else {
-      //Generate a new JWT
-      const token = jwt.sign({ name, isAdmin }, 'secret');
-      //Return the JWT as a JSON object
-      resolve({ status: 200, token });
+      const existingUser = UserHandler.userList.find(u => u.name === name && u.password === password);
+      if (existingUser.token) {
+        resolve({ status: 200, token: existingUser.token });
+      } else {
+        const token = jwt.sign({ name, isAdmin }, 'secret');
+        existingUser.token = token;
+        resolve({ status: 200, token });
+      }
     }
   });
-};
-
+}
 
 /**
  * Delete all versions of this package.
@@ -297,7 +297,26 @@ exports.packagesList = function(body,offset,xAuthorization) {
  **/
 exports.registryReset = function(xAuthorization) {
   return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
+    // Check if xAuthorization is present and valid
+    if (!xAuthorization) {
+      reject({ status: 400, error: 'There is missing field(s) in the AuthenticationToken or it is formed improperly.' });
+      return;
+    }
 
+    try {
+      const decoded = jwt.verify(xAuthorization, 'secret');
+      const user = UserHandler.userList.find(u => u.name === decoded.name && u.token === xAuthorization);
+      if (!user || !user.isAdmin) {
+        //Only reset registry if user exists and is an admin
+        reject({ status: 401, error: 'You do not have permission to reset the registry.' });
+        return;
+      }
+
+      // Delete all users from the user list
+      UserHandler.deleteUsers(UserHandler.userList);
+      resolve({ status: 200 });
+    } catch (err) {
+      reject({ status: 400, error: 'There is missing field(s) in the AuthenticationToken or it is formed improperly.' });
+    }
+  });
+};

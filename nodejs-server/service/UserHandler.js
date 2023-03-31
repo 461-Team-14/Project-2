@@ -1,34 +1,33 @@
-const userList = [
-  {
-    name: 'Alfalfa',
-    password: 'string',
-    isAdmin: false
-  }
-]
+const userList = [];
 
 module.exports = {
   userList: userList,
   addUser: addUser,
-  removeUser: removeUser
+  removeUser: removeUser,
+  deleteUsers: deleteUsers
 };
 
 //Function to add a user to the user list
 function addUser(name, isAdmin, password) {
-  //Verify that all required fields are present
-  if (!name || !isAdmin || !password) {
-    //There is missing field(s) in the AuthenticationRequest or it is formed improperly.
-    return -1;
+  const existingUser = userList.find(u => u.name === name);
+  if (existingUser) {
+    existingUser.isAdmin = isAdmin;
+    if (!isValidPassword(password)) {
+      return -2;
+    }
+    existingUser.password = password;
+  } else {
+    if (!name || !password) {
+      return -1;
+    }
+
+    if (!isValidPassword(password)) {
+      return -2;
+    }
+
+    userList.push({ name, isAdmin, password, token: '' });
   }
 
-  
-  //Verify that the password meets the requirements
-  if (!isValidPassword(password)) {
-    //The user or password is invalid.
-    return -2;
-  }
-  
-  //Add the user to the user list
-  userList.push({ name, isAdmin, password });
   return 1;
 }
 
@@ -44,6 +43,12 @@ function removeUser(name) {
   
   //Remove the user from the user list
   userList.splice(index, 1);
+}
+
+//Function to delete all users in user list
+function deleteUsers(userList) {
+  // Delete all users from the user list
+  userList.splice(0, userList.length);
 }
 
 /**
