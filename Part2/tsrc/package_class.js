@@ -42,6 +42,7 @@ var Package = /** @class */ (function () {
         //Constructor for new additions
         this.version = { major: 0, minor: 0, patch: 0 };
         this.devDependencies = {};
+        this.pinnedfraction = 0;
     }
     return Package;
 }());

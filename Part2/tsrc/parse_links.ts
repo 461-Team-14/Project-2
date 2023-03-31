@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Package } from "./package_class";
 const MAX_RETRIES = 1;
 const isGitHubUrl = require("is-github-url");
+const semver = require('semver');
 import { Octokit as OctokitType } from "octokit";
 const Octokit = OctokitType as any;
 import { provider } from "./logging";
@@ -170,9 +171,9 @@ export async function graphAPIfetch(
     const devDependencies: {[key: string]: Version} = {};
     
     for (const key in packageJson.devDependencies) {
-      const match = packageJson.devDependencies[key].match(/^\^?\d+\.\d+\.\d+(-\w+\.\d+)?/);
+      const match = packageJson.devDependencies[key].match(/^~?\^?\d+\.\d+\.\d+(-\w+\.\d+)?/);
       if (match) {
-        const versionString = match[0].replace(/^\^/, '');
+        const versionString = match[0].replace(/^~?\^/, '');
         const [major, minor, patch] = versionString.split('.').map(Number);
         devDependencies[key] = {
           major: parseInt(major),
@@ -182,9 +183,9 @@ export async function graphAPIfetch(
       }
     }
 
+    
     package_test.version = version;
     package_test.devDependencies = devDependencies;
-    
 
     // Check if the repo has issues enabled
     if (data3.data.repository.hasIssuesEnabled == true) {
@@ -282,6 +283,50 @@ export async function get_recentCommits(
   return;
 }
 
+export async function get_pinned_fraction(package_instance: {devDependencies: {[key: string]: Version}, 
+  pinnedfraction: number}): Promise<any> {
+  const log = provider.getLogger("REST.get_pinned_fraction");
+
+  try {
+    const dependencies = package_instance.devDependencies;
+
+    if (!dependencies || Object.keys(dependencies).length === 0) {
+      package_instance.pinnedfraction = 1.0;
+      log.info("No dependencies, setting pinned fraction to 1.0");
+      return;
+    }
+
+    let pinned = 0;
+    let total = 0;
+
+    const versionRegex = /^(\d+)\.(\d+)\..*$/;
+
+    for (const key in dependencies) {
+      const version = dependencies[key];
+      total++;
+
+      const match = versionRegex.exec(`${version.major}.${version.minor}.0`);
+      if (match) {
+        const major = match[1];
+        const minor = match[2];
+        const versionRange = `~${major}.${minor}.0`;
+        const satisfies = semver.satisfies(`${major}.${minor}.0`, versionRange);
+        if (satisfies) {
+          pinned++;
+        }
+      } else {
+        log.warn(`Invalid version format: ${version.major}.${version.minor}.${version.patch}`);
+      }
+    }
+
+    const fraction = total > 0 ? pinned / total : 0.0;
+
+    package_instance.pinnedfraction = parseFloat(fraction.toFixed(2));
+    log.info(`Got pinned fraction of ${package_instance.pinnedfraction}`);
+  } catch (error) {
+    log.debug("Could not get pinned fraction. Received error: " + error);
+  }
+}
 
 export function gql_query(username: string, repo: string) {
   // Query to be passed to graphQL
