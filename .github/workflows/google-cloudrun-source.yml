@@ -17,9 +17,7 @@ jobs:
       id-token: 'write'
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: my-react-app
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,9 +29,11 @@ jobs:
 
       - name: Build Development
         run: npm install
+          working-directory: my-react-app
 
       - name: Build Development
         run: npm run build
+          working-directory: my-react-app
 
       - name: Google Auth
         id: auth
