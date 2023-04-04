@@ -52,9 +52,7 @@ on:
   push:
     branches: [ "master", "main", "react-test"]
 
-defaults:
-  run:
-    working-directory: my-react-app
+
 
 env:
   PROJECT_ID: projectteam14 # TODO: update Google Cloud project id
@@ -69,6 +67,9 @@ jobs:
       id-token: 'write'
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: my-react-app
     steps:
       - name: Checkout
         uses: actions/checkout@v2
