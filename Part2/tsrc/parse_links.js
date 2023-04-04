@@ -36,10 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.gql_query = exports.get_recentCommits = exports.graphAPIfetch = exports.getGitRepoDetails = exports.npm_2_git = void 0;
+exports.gql_query = exports.get_pinned_fraction = exports.get_recentCommits = exports.graphAPIfetch = exports.getGitRepoDetails = exports.npm_2_git = void 0;
 var axios_1 = require("axios");
 var MAX_RETRIES = 1;
 var isGitHubUrl = require("is-github-url");
+var semver = require('semver');
 var octokit_1 = require("octokit");
 var Octokit = octokit_1.Octokit;
 var logging_1 = require("./logging");
@@ -186,9 +187,9 @@ function graphAPIfetch(gql_query, package_test) {
                     };
                     devDependencies = {};
                     for (key in packageJson.devDependencies) {
-                        match = packageJson.devDependencies[key].match(/^\^?\d+\.\d+\.\d+(-\w+\.\d+)?/);
+                        match = packageJson.devDependencies[key].match(/^~?\^?\d+\.\d+\.\d+(-\w+\.\d+)?/);
                         if (match) {
-                            versionString_1 = match[0].replace(/^\^/, '');
+                            versionString_1 = match[0].replace(/^~?\^/, '');
                             _a = versionString_1.split('.').map(Number), major = _a[0], minor = _a[1], patch = _a[2];
                             devDependencies[key] = {
                                 major: parseInt(major),
@@ -303,6 +304,50 @@ function get_recentCommits(package_instance) {
     });
 }
 exports.get_recentCommits = get_recentCommits;
+function get_pinned_fraction(package_instance) {
+    return __awaiter(this, void 0, void 0, function () {
+        var log, dependencies, pinned, total, versionRegex, key, version, match, major, minor, versionRange, satisfies, fraction;
+        return __generator(this, function (_a) {
+            log = logging_1.provider.getLogger("REST.get_pinned_fraction");
+            try {
+                dependencies = package_instance.devDependencies;
+                if (!dependencies || Object.keys(dependencies).length === 0) {
+                    package_instance.pinnedfraction = 1.0;
+                    log.info("No dependencies, setting pinned fraction to 1.0");
+                    return [2 /*return*/];
+                }
+                pinned = 0;
+                total = 0;
+                versionRegex = /^(\d+)\.(\d+)\..*$/;
+                for (key in dependencies) {
+                    version = dependencies[key];
+                    total++;
+                    match = versionRegex.exec("".concat(version.major, ".").concat(version.minor, ".0"));
+                    if (match) {
+                        major = match[1];
+                        minor = match[2];
+                        versionRange = "~".concat(major, ".").concat(minor, ".0");
+                        satisfies = semver.satisfies("".concat(major, ".").concat(minor, ".0"), versionRange);
+                        if (satisfies) {
+                            pinned++;
+                        }
+                    }
+                    else {
+                        log.warn("Invalid version format: ".concat(version.major, ".").concat(version.minor, ".").concat(version.patch));
+                    }
+                }
+                fraction = total > 0 ? pinned / total : 0.0;
+                package_instance.pinnedfraction = parseFloat(fraction.toFixed(2));
+                log.info("Got pinned fraction of ".concat(package_instance.pinnedfraction));
+            }
+            catch (error) {
+                log.debug("Could not get pinned fraction. Received error: " + error);
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.get_pinned_fraction = get_pinned_fraction;
 function gql_query(username, repo) {
     // Query to be passed to graphQL
     // :param username: GitHub username of repository owner

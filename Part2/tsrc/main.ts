@@ -9,6 +9,7 @@ import { Package } from "./package_class";
 import { Runner } from "./runner_class";
 import { get_info_from_cloned_repo } from "./clone_repo";
 import { get_recentCommits } from "./parse_links";
+import { get_pinned_fraction } from "./parse_links";
 import { provider } from "./logging";
 import { Logger } from "typescript-logging-log4ts-style";
 
@@ -69,6 +70,8 @@ export async function main() {
     log.info("Getting info from cloned repo...");
     await get_info_from_cloned_repo(package_test);
     await get_recentCommits(package_test);
+    log.info("getting pinned fractions");
+    await get_pinned_fraction(package_test);
     await run_test.calculate_correctness();
     log.info("calculating correctness");
     await run_test.calculate_responsiveness();
@@ -87,6 +90,7 @@ export async function main() {
     log.info("License Score " + run_test.package_instance.license);
     log.info("Bus Factor " + run_test.package_instance.bus_factor);
     log.info("Responsiveness " + run_test.package_instance.responsiveness);
+    log.info("GoodPinningPractice " + run_test.package_instance.pinnedfraction);
     log.info("Total Score " + run_test.package_instance.score);
 
     // Return results in JSON form
@@ -98,6 +102,7 @@ export async function main() {
       BUS_FACTOR_SCORE: run_test.package_instance.bus_factor,
       RESPONSIVE_MAINTAINER_SCORE: run_test.package_instance.responsiveness,
       LICENSE_SCORE: run_test.package_instance.license,
+      GOODPINNING_SCORE: run_test.package_instance.pinnedfraction,
     };
 
     console.log(JSON.stringify(retval));
