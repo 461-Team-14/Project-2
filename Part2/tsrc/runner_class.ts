@@ -222,11 +222,12 @@ export class Runner {
     log.info("Calculating final score...");
 
     this.package_instance.score =
-      0.35 * this.package_instance.bus_factor +
+      0.25 * this.package_instance.bus_factor +
       0.25 * this.package_instance.license +
       0.2 * this.package_instance.correctness +
       0.1 * this.package_instance.ramp_up +
-      0.1 * this.package_instance.responsiveness;
+      0.1 * this.package_instance.responsiveness +
+      0.1 * this.package_instance.pinnedfraction;
 
     this.package_instance.score = parseFloat(
       this.package_instance.score.toPrecision(2)

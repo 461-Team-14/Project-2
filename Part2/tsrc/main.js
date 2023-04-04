@@ -42,6 +42,7 @@ var package_class_1 = require("./package_class");
 var runner_class_1 = require("./runner_class");
 var clone_repo_1 = require("./clone_repo");
 var parse_links_2 = require("./parse_links");
+var parse_links_3 = require("./parse_links");
 var logging_1 = require("./logging");
 function main() {
     return __awaiter(this, void 0, void 0, function () {
@@ -65,7 +66,7 @@ function main() {
                 case 1:
                     // Handle the url
                     (_a = _b.sent(), username = _a.username, repoName = _a.repoName, gitUrl2 = _a.url);
-                    if (!(username != null && repoName != null && gitUrl2 != null)) return [3 /*break*/, 11];
+                    if (!(username != null && repoName != null && gitUrl2 != null)) return [3 /*break*/, 12];
                     package_test = new package_class_1.Package(gitUrl2, repoName, username, process.env.GITHUB_TOKEN);
                     log.info("Getting info from graphQL query");
                     return [4 /*yield*/, (0, parse_links_1.graphAPIfetch)((0, parse_links_1.gql_query)(username, repoName), package_test)["catch"](function (error) {
@@ -85,28 +86,32 @@ function main() {
                     return [4 /*yield*/, (0, parse_links_2.get_recentCommits)(package_test)];
                 case 4:
                     _b.sent();
-                    return [4 /*yield*/, run_test.calculate_correctness()];
+                    log.info("getting pinned fractions");
+                    return [4 /*yield*/, (0, parse_links_3.get_pinned_fraction)(package_test)];
                 case 5:
+                    _b.sent();
+                    return [4 /*yield*/, run_test.calculate_correctness()];
+                case 6:
                     _b.sent();
                     log.info("calculating correctness");
                     return [4 /*yield*/, run_test.calculate_responsiveness()];
-                case 6:
+                case 7:
                     _b.sent();
                     log.info("calculating responsiveness");
                     return [4 /*yield*/, run_test.calculate_ramp()];
-                case 7:
+                case 8:
                     _b.sent();
                     log.info("calculating ramp-up");
                     return [4 /*yield*/, run_test.calculate_license()];
-                case 8:
+                case 9:
                     _b.sent();
                     log.info("calculating license");
                     return [4 /*yield*/, run_test.calculate_bus()];
-                case 9:
+                case 10:
                     _b.sent();
                     log.info("calculating bus factor");
                     return [4 /*yield*/, run_test.calculate_score()];
-                case 10:
+                case 11:
                     _b.sent();
                     log.info("calculating final score");
                     log.info("Correctness " + run_test.package_instance.correctness);
@@ -114,6 +119,7 @@ function main() {
                     log.info("License Score " + run_test.package_instance.license);
                     log.info("Bus Factor " + run_test.package_instance.bus_factor);
                     log.info("Responsiveness " + run_test.package_instance.responsiveness);
+                    log.info("GoodPinningPractice " + run_test.package_instance.pinnedfraction);
                     log.info("Total Score " + run_test.package_instance.score);
                     retval = {
                         URL: url,
@@ -122,11 +128,12 @@ function main() {
                         CORRECTNESS_SCORE: run_test.package_instance.correctness,
                         BUS_FACTOR_SCORE: run_test.package_instance.bus_factor,
                         RESPONSIVE_MAINTAINER_SCORE: run_test.package_instance.responsiveness,
-                        LICENSE_SCORE: run_test.package_instance.license
+                        LICENSE_SCORE: run_test.package_instance.license,
+                        GOODPINNING_SCORE: run_test.package_instance.pinnedfraction
                     };
                     console.log(JSON.stringify(retval));
                     return [2 /*return*/, 0];
-                case 11:
+                case 12:
                     log.debug("Unable to fetch repo -> ".concat(username, "/").concat(repoName));
                     return [2 /*return*/, 1];
             }

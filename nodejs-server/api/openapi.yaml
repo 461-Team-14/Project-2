@@ -514,7 +514,7 @@ paths:
         "404":
           description: Package does not exist.
       x-swagger-router-controller: Default
-  /package/byRegEx/{regex}:
+  /package/byRegEx:
     post:
       summary: Get any packages fitting the regular expression.
       description: Search for a package using regular expression over package names

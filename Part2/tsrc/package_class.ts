@@ -40,6 +40,7 @@ export class Package {
   //New additions for version pinning
   version: Version;
   devDependencies: {[key: string]: Version};
+  pinnedfraction: number;
 
 
   constructor(URL: string = "", repo = "", owner = "github", token = "") {
@@ -79,5 +80,6 @@ export class Package {
     //Constructor for new additions
     this.version = { major: 0, minor: 0, patch: 0 };
     this.devDependencies = {};
+    this.pinnedfraction = 0;
   }
 }
