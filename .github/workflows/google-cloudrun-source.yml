@@ -28,12 +28,10 @@ jobs:
           node-version: '18.x'
 
       - name: Build Development
-        run: npm install
-          working-directory: my-react-app
+        run: cd my-react-app; npm install
 
       - name: Build Development
-        run: npm run build
-          working-directory: my-react-app
+        run: cd my-react-app; npm run build
 
       - name: Google Auth
         id: auth
