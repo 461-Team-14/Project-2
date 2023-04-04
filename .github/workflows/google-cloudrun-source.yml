@@ -44,13 +44,15 @@
 #   Cloud Run builds from source        - https://cloud.google.com/run/docs/deploying-source-code
 #   Principle of least privilege        - https://cloud.google.com/blog/products/identity-security/dont-get-pwned-practicing-the-principle-of-least-privilege
 
+defaults:
+  run:
+    working-directory: my-react-app
+
 name: Deploy to Cloud Run from Source
 
 on:
   push:
     branches: [ "master", "main", "react-test"]
-
-workingDirectory: 'my-react-app'
 
 env:
   PROJECT_ID: projectteam14 # TODO: update Google Cloud project id
