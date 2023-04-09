@@ -216,6 +216,19 @@ exports.packageDelete = function(id,xAuthorization) {
   });
 }
 
+//Test operation
+exports.hello = function(body) {
+  return new Promise(function(resolve, reject) {
+    try {
+    resolve({status: 200, Body: body, message: 'goodbye'});
+    }
+    catch (err) {
+      reject({ status: 400, error: "IT DIDN'T WORK" });
+      return;
+    }
+  });
+}
+
 
 /**
  *

@@ -233,6 +233,21 @@ paths:
         "404":
           description: Package does not exist.
       x-swagger-router-controller: Default
+    post:
+      summary: Test code
+      operationId: HelloUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: Recieved INPUT
+        "400":
+          description: It didn't work
+      x-swagger-router-controller: Default
     delete:
       summary: Delete this version of the package.
       operationId: PackageDelete
