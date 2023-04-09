@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import TestHaley from './TestHaley'
-// import InputForm from './InputForm'
+import InputForm from './InputForm'
 import reportWebVitals from './reportWebVitals';
+
+function handleSubmit(value: string) {
+  console.log('Submitted value:', value);
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,8 +15,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <TestHaley />
-    <App />
-    {/* <InputForm /> */}
+    <InputForm onSubmit={handleSubmit} />
   </React.StrictMode>
 );
 

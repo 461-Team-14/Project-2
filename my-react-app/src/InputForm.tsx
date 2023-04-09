@@ -1,57 +1,50 @@
 import React, { useState } from 'react';
+import JSZip from 'jszip';
 
-interface Props {
+type Props = {
   onSubmit: (value: string) => void;
+  packageJson?: string;
 }
 
-function InputForm(props: Props) {
-  const [inputValue, setInputValue] = useState('');
-  const [message, setMessage] = useState('');
+const PackageReader: React.FC<Props> = (props) => {
+  const [packageFile, setSelectedFile] = useState<File | null>(null);
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | undefined = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+  
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    fetch('http://localhost:8080/authenticate', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        User: {
-          name: inputValue,
-          isAdmin: true
-        },
-        Secret: {
-          password: "strABDED34@4325Eing"
-        }
-      })
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error))
-    // console.log(response)
-    // const data = await response.json();
-    // props.onSubmit(data.result);
-    setInputValue('');
-    setMessage('Text received!');
-    setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
-  }
+  const handleButtonClick = async () => {
+    if (!packageFile) {
+      return;
+    }
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(event.target.value);
-  }
+    const zip = await JSZip.loadAsync(packageFile);
+    const packageJsonFile = zip.file('package.json');
+
+    if (!packageJsonFile) {
+      console.error('package.json not found in zip file');
+      return;
+    }
+
+    const packageJsonContent = await packageJsonFile.async('string');
+    const packageJson = JSON.parse(packageJsonContent);
+
+    props.onSubmit(packageJson);
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-      />
-      <button type="submit">Submit</button>
-      {message && <p>{message}</p>}
-    </form>
+    <div>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleButtonClick}>Read package.json</button>
+      {props.packageJson && (
+        <pre>{JSON.stringify(props.packageJson, null, 2)}</pre>
+      )}
+    </div>
   );
-}
+};
 
-export default InputForm;
+export default PackageReader;

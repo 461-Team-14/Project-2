@@ -10,6 +10,7 @@ module.exports.CreateAuthToken = function createAuthToken (req, res, next, body)
     .then(function (response) {
       res.setHeader('X-Authorization', response.token);
       utils.writeJson(res, response);
+      // console.log(body)
     })
     .catch(function (response) {
       utils.writeJson(res, response.status || 500, response);
