@@ -1,28 +1,16 @@
-import React, { useState } from 'react';
-import JSZip from 'jszip';
+import React from 'react';
+import InputForm from './InputForm';
 
-const App: React.FC = () => {
-  const [hasPackageJson, setHasPackageJson] = useState(false);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const zip = await JSZip.loadAsync(file);
-
-    if (zip.file('package.json')) {
-      setHasPackageJson(true);
-    } else {
-      setHasPackageJson(false);
-    }
-  };
+function App() {
+  function handleSubmit(value: string) {
+    console.log('Submitted value:', value);
+  }
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
-      {hasPackageJson && <p>This zip file contains a package.json file.</p>}
+      <InputForm onSubmit={handleSubmit} />
     </div>
   );
-};
+}
 
 export default App;
