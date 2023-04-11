@@ -193,7 +193,7 @@ exports.packageCreate = function(body, xAuthorization) {
       };
 
     // Return the Package object with status 201
-    resolve({ packageObj });
+    resolve({status: 201, packageObj});
 
     } catch (err) {
       reject({ status: 400, error: 'Authentication failed (e.g. AuthenticationToken invalid or does not exist)' });
@@ -367,7 +367,7 @@ exports.registryReset = function(xAuthorization) {
 
       //Delete all users from the user list
       UserHandler.deleteUsers(UserHandler.userList);
-      resolve({status: 201, packageObj});
+      resolve(200);
     } catch (err) {
       reject({ status: 400, error: 'There is missing field(s) in the AuthenticationToken or it is formed improperly.' });
       return;
