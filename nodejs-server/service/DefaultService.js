@@ -115,27 +115,35 @@ exports.packageByNameGet = function(name,xAuthorization) {
  * Get any packages fitting the regular expression.
  * Search for a package using regular expression over package names and READMEs. This is similar to search by name.
  *
- * body String 
- * regex PackageRegEx 
+ * body PackageRegEx 
  * xAuthorization AuthenticationToken  (optional)
  * returns List
  **/
-exports.packageByRegExGet = function(body,regex,xAuthorization) {
+exports.packageByRegExGet = function(body, xAuthorization) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "Version" : "1.2.3",
-  "ID" : "ID",
-  "Name" : "Name"
-}, {
-  "Version" : "1.2.3",
-  "ID" : "ID",
-  "Name" : "Name"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+    if (!body) {
+      reject({ status: 400, error: "The regex field is missing in the PackageRegEx." });
+      return;
+    }
+
+    //Filter the packageList array based on the regex provided
+    var filteredList = PackageHandler.packageList.filter(function(pkg) {
+      return (new RegExp(body, 'i')).test(pkg.Name) || (pkg.Readme && (new RegExp(body, 'i')).test(pkg.Readme));
+    });
+
+    //Create an array of package objects from the filteredList
+    var foundPackages = filteredList.map(function(pkg) {
+      return {
+        Version: pkg.Version,
+        Name: pkg.Name
+      };
+    });
+
+    if (foundPackages.length === 0) {
+      reject({ status: 404, error: "No package found under this regex." });
+      return;
     } else {
-      resolve();
+      return resolve(foundPackages);
     }
   });
 }
@@ -213,19 +221,6 @@ exports.packageCreate = function(body, xAuthorization) {
 exports.packageDelete = function(id,xAuthorization) {
   return new Promise(function(resolve, reject) {
     resolve();
-  });
-}
-
-//Test operation
-exports.hello = function(body) {
-  return new Promise(function(resolve, reject) {
-    try {
-    resolve({status: 200, Body: body, message: 'goodbye'});
-    }
-    catch (err) {
-      reject({ status: 400, error: "IT DIDN'T WORK" });
-      return;
-    }
   });
 }
 
