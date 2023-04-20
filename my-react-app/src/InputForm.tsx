@@ -10,31 +10,33 @@ function InputForm(props: Props) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch('http://localhost:8080/authenticate', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        User: {
-          name: inputValue,
-          isAdmin: true
+    try {
+      const response = await fetch('http://localhost:8080/authenticate', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
-        Secret: {
-          password: "strABDED34@4325Eing"
-        }
-      })
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error))
-    // console.log(response)
-    // const data = await response.json();
-    // props.onSubmit(data.result);
-    setInputValue('');
-    setMessage('Text received!');
-    setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
+        mode: 'cors',
+        body: JSON.stringify({
+          User: {
+            name: inputValue,
+            isAdmin: true
+          },
+          Secret: {
+            password: "strABDED34@4325Eing"
+          }
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+      props.onSubmit(data.result);
+      setInputValue('');
+      setMessage('Text received!');
+      setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
