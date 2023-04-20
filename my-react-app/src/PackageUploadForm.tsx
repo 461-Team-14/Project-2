@@ -43,23 +43,42 @@ function PackageUploadForm({ onSubmit }: Props) {
             }
         }
       }
-
       
       // Extract the name and version from package.json data
       const packageJsonData = JSON.parse(requiredFilesData[`${zipFileName}/package.json`]);
+      if (!packageJsonData.homepage || typeof packageJsonData.homepage !== 'string' || packageJsonData.homepage.trim() === '') {
+        throw new Error('No homepage URL found in the package.json file.');
+      }
       const packageName = packageJsonData.name;
       const packageVersion = packageJsonData.version;
 
       // Exclude .git directory files and add the rest to the zip
       for (const fileName of Object.keys(content.files)) {
-        if (!fileName.toLowerCase().startsWith(`${zipFileName}/.git/`)) {
-          const fileData = await content.file(fileName)?.async('uint8array');
+        const isExcluded = [
+        '.git',
+        'CVS',
+        '.svn',
+        '.hg',
+        '.lock-wscript',
+        '.wafpickle-N',
+        '.*.swp',
+        '.DS_Store',
+        '._*',
+        'npm-debug.log',
+        '.npmrc',
+        'node_modules',
+        'config.gypi',
+        '*.orig',
+        'package-lock.json'
+        ].some((excluded) => fileName.toLowerCase().startsWith(`${zipFileName}/${excluded.toLowerCase()}`));
+
+        if (!isExcluded) {
+        const fileData = await content.file(fileName)?.async('uint8array');
             if (fileData) {
                 zip.file(fileName, fileData);
             }
-          }
+        }
       }
-  
 
       // Encode the package contents as Base64-encoded text
       const packageContents = await zip.generateAsync({ type: 'base64' });
