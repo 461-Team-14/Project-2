@@ -5,8 +5,9 @@ interface Props {
   onSubmit: (formData: FormData) => void;
 }
 
-function PackageUploadForm({ onSubmit }: Props) {
+function PackageUploadForm(props: Props) {
   const [file, setFile] = useState<File | null>(null);
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -90,7 +91,28 @@ function PackageUploadForm({ onSubmit }: Props) {
       // Add the package contents to the form data
       formData.append('packageContents', packageContents);
 
-      onSubmit(formData);
+      try {
+        const response = await fetch('http://localhost:8080/authenticate', {
+            method: 'POST',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Authorization': 'your_authorization_header_value_here'
+            },
+            mode: 'cors',
+            body: JSON.stringify({
+            Content: packageContents,
+            JSProgram: "if (process.argv.length === 7) {\nconsole.log('Success')\nprocess.exit(0)\n} else {\nconsole.log('Failed')\nprocess.exit(1)\n}\n"
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+        props.onSubmit(data.result);
+        setMessage('Package received!');
+        setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
+        } catch (error) {
+        console.error(error);
+        }
     }
   };
 
@@ -105,6 +127,7 @@ function PackageUploadForm({ onSubmit }: Props) {
       <br />
       <input type="file" id="fileInput" onChange={handleFileChange} accept=".zip" aria-describedby="fileInputDescription" aria-required="true" required />
       <button type="submit">Submit</button>
+      {message && <p>{message}</p>}
     </form>
   );
 }
