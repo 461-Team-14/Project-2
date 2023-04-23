@@ -1,6 +1,6 @@
 import React from 'react';
 import InputForm from './InputForm';
-import PackageUploadForm from './PackageUploadForm';
+// import PackageUploadForm from './PackageUploadForm';
 
 function App() {
   function handleSubmit(value: string) {
