@@ -13,6 +13,7 @@ root.render(
   <React.StrictMode>
     <TestHaley />
     <App />
+    {/* <InputForm /> */}
   </React.StrictMode>
 );
 

@@ -3,7 +3,7 @@ export default class FirstComponent extends React.Component <{}> {
   render() {
     return (
       <div>
-        <h3>Input name for User Creation Test</h3>
+        <h3>A Simple React Component Example with Typescript</h3>
       </div>
     );
   }
