@@ -67,15 +67,19 @@ function InputForm(props: Props) {
         value={password}
         onChange={handlePasswordChange}
         placeholder="Password"
+        className="file-input"
       />
-      <label>
-        Admin:
-        <input
-          type="checkbox"
-          checked={isAdmin}
-          onChange={handleIsAdminChange}
-        />
-      </label>
+      <div className="admin-wrapper">
+        <label className="admin-label">
+          Admin:
+          <input
+            type="checkbox"
+            checked={isAdmin}
+            onChange={handleIsAdminChange}
+            className="admin-checkbox"
+          />
+        </label>
+      </div>
       <button type="submit">Submit</button>
       {message && <p>{message}</p>}
     </form>

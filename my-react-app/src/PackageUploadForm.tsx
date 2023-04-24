@@ -125,7 +125,7 @@ function PackageUploadForm(props: Props) {
       <p id="fileInputDescription">Please select Packages to Upload</p>
       <label htmlFor="fileInput" aria-label="Select zip file">Select zip file:</label>
       <br />
-      <input type="file" id="fileInput" onChange={handleFileChange} accept=".zip" aria-describedby="fileInputDescription" aria-required="true" required />
+      <input type="file" id="fileInput" onChange={handleFileChange} className="file-input" accept=".zip" aria-describedby="fileInputDescription" aria-required="true" required />
       <button type="submit">Submit</button>
       {message && <p>{message}</p>}
     </form>
