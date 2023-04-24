@@ -107,8 +107,8 @@ function PackageUploadForm(props: Props) {
         });
         const data = await response.json();
         console.log(data);
-        props.onSubmit(data.result);
         setMessage('Package received!');
+        props.onSubmit(data.result);
         setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
         } catch (error) {
         console.error(error);
