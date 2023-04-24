@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+
 interface Props {
-  onSubmit: (name: string, password: string) => void;
+  onSubmit: (name: string, password: string, isAdmin: boolean) => void;
 }
 
 function InputForm(props: Props) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState('');
 
   function handleUser(event: React.FormEvent<HTMLFormElement>) {
@@ -19,7 +21,7 @@ function InputForm(props: Props) {
       body: JSON.stringify({
         User: {
           name: name,
-          isAdmin: true
+          isAdmin: isAdmin
         },
         Secret: {
           password: password
@@ -29,7 +31,7 @@ function InputForm(props: Props) {
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      props.onSubmit(name, password);
+      props.onSubmit(name, password, isAdmin);
       setName('');
       setPassword('');
       setMessage('User Registered!');
@@ -48,6 +50,10 @@ function InputForm(props: Props) {
     setPassword(event.target.value);
   }
 
+  function handleIsAdminChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setIsAdmin(event.target.checked);
+  }
+
   return (
     <form onSubmit={handleUser}>
       <input
@@ -62,6 +68,14 @@ function InputForm(props: Props) {
         onChange={handlePasswordChange}
         placeholder="Password"
       />
+      <label>
+        Admin:
+        <input
+          type="checkbox"
+          checked={isAdmin}
+          onChange={handleIsAdminChange}
+        />
+      </label>
       <button type="submit">Submit</button>
       {message && <p>{message}</p>}
     </form>
