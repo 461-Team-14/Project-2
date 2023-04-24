@@ -11,9 +11,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <TestHaley />
-    <App />
-    {/* <InputForm /> */}
+    <div className="center-container">
+      <TestHaley />
+      <App />
+      {/* <InputForm /> */}
+    </div>
   </React.StrictMode>
 );
 
