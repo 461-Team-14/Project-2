@@ -6,5 +6,5 @@ handlers:
   upload: my-react-app/build/(.*\..+)$
 # Catch all handler to index.html
 - url: /.*
-  static_files: my-react-app/build/public/index.html
-  upload: my-react-app/build/public/index.html
+  static_files: my-react-app/public/index.html
+  upload: my-react-app/public/index.html
