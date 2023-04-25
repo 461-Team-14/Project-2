@@ -41,12 +41,10 @@ function App() {
   }
 
   function handleUpdatePackage() {
-    // Call the function to update the package with the selectedPackageId
     console.log('Updating package with ID:', selectedPackageId);
   }
 
   function handleInteractPackage() {
-    // Call the function to interact with the package with the selectedPackageId
     console.log('Interacting with package with ID:', selectedPackageId);
   }
 
@@ -60,61 +58,81 @@ function App() {
       <header>
         <button onClick={() => setShowLoginModal(true)}>Login/Signup</button>
       </header>
+  
+      {/* Login/Signup Modal */}
       {showLoginModal && (
-        <div className="modal">
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
           <div className="modal-content">
-            <span className="close" onClick={() => setShowLoginModal(false)}>&times;</span>
+            <button className="close" onClick={() => setShowLoginModal(false)} aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h2 id="login-modal-title">Login/Signup</h2>
             <InputForm onSubmit={handleUser} />
           </div>
         </div>
       )}
   
+      {/* Package Upload Form */}
       <h3>Upload A Zipped Package Below.</h3>
-
       <PackageUploadForm onSubmit={handlePackageSubmit} />
-
-      <button onClick={handlePackageMenu}>
-        {'Interact with Packages'}
-      </button>
-      <button onClick={handleSearchMenu}>
-        {'Search Packages'}
-      </button>
+  
+      {/* Package Operations */}
+      <div className="button-group">
+        <button onClick={handlePackageMenu} aria-expanded={showPackageMenu}>
+          {'Package Operations'}
+        </button>
+        {showPackageMenu && (
+          // eslint-disable-next-line jsx-a11y/role-supports-aria-props
+          <div className="package-menu" role="menu" aria-expanded={showPackageMenu}>
+            <ul>
+              <li><button onClick={handleInteractPackage} role="menuitem">Get Package</button></li>
+              <li><button onClick={handleUpdatePackage} role="menuitem">Update Package</button></li>
+              <li><DeleteID onSubmit={handleDeleteID} /></li>
+              {/* Add more package manipulation options here */}
+            </ul>
+            <button className="close" onClick={() => setShowPackageMenu(false)} aria-label="Close Menu">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        )}
+      </div>
+  
+      {/* Search Packages */}
+      <div className="button-group">
+        <button onClick={handleSearchMenu} aria-expanded={showSearchMenu}>
+          {'Search Packages'}
+        </button>
+        {showSearchMenu && (
+          // eslint-disable-next-line jsx-a11y/role-supports-aria-props
+          <div className="search-menu" role="menu" aria-expanded={showSearchMenu}>
+            <ul>
+              <li><RegexSearch onSubmit={handleRegex} /></li>
+              {/* Add more search options here */}
+            </ul>
+            <button className="close" onClick={() => setShowSearchMenu(false)} aria-label="Close Menu">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        )}
+      </div>
+  
+      {/* Reset Registry */}
       <button onClick={handleResetRegistry}>Reset Registry</button>
   
-      {showPackageMenu && (
-        <div className="package-menu">
-          <p>Package Manipulation Options:</p>
-          <ul>
-            <li><button onClick={handleInteractPackage}>Get Package</button></li>
-            <li><button onClick={handleUpdatePackage}>Update Package</button></li>
-            <li><DeleteID onSubmit={handleDeleteID} /></li>
-            {/* Add more package manipulation options here */}
-          </ul>
-          <button onClick={() => setShowPackageMenu(false)}>Close Menu</button>
-        </div>
-      )}
-  
-      {showSearchMenu && (
-        <div className="search-menu">
-          <p>Search Packages:</p>
-          <ul>
-            <li><RegexSearch onSubmit={handleRegex} /></li>
-            {/* Add more search options here */}
-          </ul>
-          <button onClick={() => setShowSearchMenu(false)}>Close Menu</button>
-        </div>
-      )}
-  
+      {/* Reset Registry Modal */}
       {showResetModal && (
-        <div className="modal">
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
           <div className="modal-content">
-            <span className="close" onClick={() => setShowResetModal(false)}>&times;</span>
+            <button className="close" onClick={() => setShowResetModal(false)} aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h2 id="reset-modal-title">Reset Registry</h2>
             <Reset onSubmit={() => setShowResetModal(false)} />
           </div>
         </div>
       )}
     </div>
-  );  
+  );   
 }
 
 export default App;
