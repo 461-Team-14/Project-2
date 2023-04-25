@@ -2,15 +2,27 @@ import React, { useState } from 'react';
 import JSZip from 'jszip';
 
 interface Props {
-  onSubmit: (formData: FormData) => void;
+  onSubmit: (formData: FormData, token: string) => void;
 }
 
 function PackageUploadForm(props: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
+  const [token, setToken] = useState('');
+  const [showTokenPrompt, setShowTokenPrompt] = useState(true); // Add state variable
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!file) {
+      setMessage('Please select a file to upload.');
+      return;
+    }
+
+    if (showTokenPrompt && !token) {
+      setMessage('Please enter a token.');
+      return;
+    }
 
     if (file) {
       const formData = new FormData();
@@ -97,7 +109,7 @@ function PackageUploadForm(props: Props) {
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'X-Authorization': 'your_authorization_header_value_here'
+            'X-Authorization': `${token}`
             },
             mode: 'cors',
             body: JSON.stringify({
@@ -108,20 +120,34 @@ function PackageUploadForm(props: Props) {
         const data = await response.json();
         console.log(data);
         setMessage('Package received!');
-        props.onSubmit(data.result);
-        setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
+        props.onSubmit(data.result, token);
+        setShowTokenPrompt(false);
+        setTimeout(() => setMessage(''), 4000); // clear message after 2 seconds
         } catch (error) {
         console.error(error);
+        setMessage('Failed to receive Package.');
+        setTimeout(() => setMessage(''), 4000); // clear message after 2 seconds
         }
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleTokenChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToken(event.target.value);
+  }
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     setFile(event.target.files?.[0] || null);
+    setToken('');
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {showTokenPrompt && file && ( // Only show token prompt if showTokenPrompt is true
+        <div>
+          <label htmlFor="token">Token:</label>
+          <input type="text" id="token" name="token" value={token} onChange={handleTokenChange} required />
+        </div>
+      )}
       <p id="fileInputDescription">Please select Packages to Upload</p>
       <label htmlFor="fileInput" aria-label="Select zip file">Select zip file:</label>
       <br />

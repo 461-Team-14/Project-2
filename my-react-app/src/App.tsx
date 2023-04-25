@@ -4,6 +4,8 @@ import PackageUploadForm from './PackageUploadForm';
 import RegexSearch from './RegexSearch';
 import Reset from './Reset';
 import DeleteID from './DeleteID';
+import DeleteName from './DeleteName';
+import GetID from './GetID';
 import './App.css';
 
 function App() {
@@ -28,7 +30,7 @@ function App() {
     setShowLoginModal(false);
   }
 
-  function handlePackageSubmit(formData: FormData) {
+  function handlePackageSubmit(formData: FormData, token: string) {
     console.log('Submitted package:', formData);
   }
 
@@ -44,13 +46,18 @@ function App() {
     console.log('Updating package with ID:', selectedPackageId);
   }
 
-  function handleInteractPackage() {
-    console.log('Interacting with package with ID:', selectedPackageId);
+  function handleInteractPackage(token: string, ID: string) {
+    setSelectedPackageId(ID);
+    console.log('Interacting with package with ID:', ID, 'using auth token:', token);
   }
 
   function handleDeleteID(token: string, ID: string) {
     setSelectedPackageId(ID);
     console.log('Deleting package with ID:', ID, 'using auth token:', token);
+  }
+
+  function handleDeleteName(token: string, Name: string) {
+    console.log('Deleting package with Name:', Name, 'using auth token:', token);
   }
 
   return (
@@ -85,9 +92,10 @@ function App() {
           // eslint-disable-next-line jsx-a11y/role-supports-aria-props
           <div className="package-menu" role="menu" aria-expanded={showPackageMenu}>
             <ul>
-              <li><button onClick={handleInteractPackage} role="menuitem">Get Package</button></li>
+              <li><GetID onSubmit={handleInteractPackage} /></li>
               <li><button onClick={handleUpdatePackage} role="menuitem">Update Package</button></li>
               <li><DeleteID onSubmit={handleDeleteID} /></li>
+              <li><DeleteName onSubmit={handleDeleteName} /></li>
               {/* Add more package manipulation options here */}
             </ul>
             <button className="close" onClick={() => setShowPackageMenu(false)} aria-label="Close Menu">
