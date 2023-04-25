@@ -18,4 +18,9 @@ code {
   align-items: center;
   justify-content: center;
   height: 100vh; /* Optional, set the container height to full viewport height */
+  background-color: #F4F4F8;
+}
+
+body {
+  background-color: #F4F4F8;
 }
