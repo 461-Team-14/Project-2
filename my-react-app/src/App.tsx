@@ -3,12 +3,23 @@ import InputForm from './InputForm';
 import PackageUploadForm from './PackageUploadForm';
 import RegexSearch from './RegexSearch';
 import Reset from './Reset';
-import './App.css'; 
+import DeleteID from './DeleteID';
+import './App.css';
 
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showPackageMenu, setShowPackageMenu] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
+  const [selectedPackageId, setSelectedPackageId] = useState('');
+  const [showSearchMenu, setShowSearchMenu] = useState(false);
+
+  function handlePackageMenu() {
+    setShowPackageMenu(!showPackageMenu);
+  }
+
+  function handleSearchMenu() {
+    setShowSearchMenu(!showSearchMenu);
+  }
 
   function handleUser(name: string, password: string, isAdmin: boolean) {
     console.log('Submitted name:', name);
@@ -21,16 +32,27 @@ function App() {
     console.log('Submitted package:', formData);
   }
 
-  function handleRegex(regex: string) { 
-    console.log('Submitted regex:', regex)
+  function handleRegex(regex: string) {
+    setSelectedPackageId(regex);
   }
 
   function handleResetRegistry() {
     setShowResetModal(true);
   }
 
-  function handlePackageMenu() {
-    setShowPackageMenu(!showPackageMenu);
+  function handleUpdatePackage() {
+    // Call the function to update the package with the selectedPackageId
+    console.log('Updating package with ID:', selectedPackageId);
+  }
+
+  function handleInteractPackage() {
+    // Call the function to interact with the package with the selectedPackageId
+    console.log('Interacting with package with ID:', selectedPackageId);
+  }
+
+  function handleDeleteID(token: string, ID: string) {
+    setSelectedPackageId(ID);
+    console.log('Deleting package with ID:', ID, 'using auth token:', token);
   }
 
   return (
@@ -46,23 +68,40 @@ function App() {
           </div>
         </div>
       )}
-
+  
       <h3>Upload A Zipped Package Below.</h3>
-  
+
       <PackageUploadForm onSubmit={handlePackageSubmit} />
-  
-      <button onClick={handlePackageMenu}>Package Menu</button>
-  
+
+      <button onClick={handlePackageMenu}>
+        {'Interact with Packages'}
+      </button>
+      <button onClick={handleSearchMenu}>
+        {'Search Packages'}
+      </button>
       <button onClick={handleResetRegistry}>Reset Registry</button>
   
       {showPackageMenu && (
         <div className="package-menu">
           <p>Package Manipulation Options:</p>
           <ul>
-            <li><RegexSearch onSubmit={handleRegex} /></li>
-            <li>Package Deletion</li>
+            <li><button onClick={handleInteractPackage}>Get Package</button></li>
+            <li><button onClick={handleUpdatePackage}>Update Package</button></li>
+            <li><DeleteID onSubmit={handleDeleteID} /></li>
             {/* Add more package manipulation options here */}
           </ul>
+          <button onClick={() => setShowPackageMenu(false)}>Close Menu</button>
+        </div>
+      )}
+  
+      {showSearchMenu && (
+        <div className="search-menu">
+          <p>Search Packages:</p>
+          <ul>
+            <li><RegexSearch onSubmit={handleRegex} /></li>
+            {/* Add more search options here */}
+          </ul>
+          <button onClick={() => setShowSearchMenu(false)}>Close Menu</button>
         </div>
       )}
   
@@ -75,7 +114,7 @@ function App() {
         </div>
       )}
     </div>
-  );
+  );  
 }
 
 export default App;
