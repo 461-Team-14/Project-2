@@ -38,7 +38,7 @@
 }
 
 button, input[type="text"] {
-  background-color: #44a9fc;
+  background-color: #009FB7;
   border: none;
   color: rgb(0, 0, 0);
   padding: 10px 20px;
@@ -118,22 +118,26 @@ ul {
 }
 
 button, input[type="submit"], input[type="button"] {
-  background-color: #44a9fc;
-  border: none;
+  border: 1px solid #009FB7;
   color: rgb(255, 255, 255);
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
+  background-color: #f2f2f2;
   font-size: 16px;
   font-weight: bold;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
+  color: #333;
 }
 
+
 input[type="text"] {
-  border: none;
+  border: 1px solid #009FB7;
+  background-color: #f2f2f2;
+  color: #333;
   border-radius: 5px;
   padding: 10px;
   font-size: 16px;
@@ -142,7 +146,7 @@ input[type="text"] {
 
 .password-input,
 .file-input {
-  border: 1px solid #ccc;
+  border: 1px solid #009FB7;
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
@@ -169,4 +173,23 @@ input[type="text"] {
 
 .admin-checkbox {
   vertical-align: middle;
+}
+
+button {
+  background-color: #FE4A49;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #F7C59F;
+}
+
+h3 {
+  color: #004E89;
+  margin-top: 30px;
 }
