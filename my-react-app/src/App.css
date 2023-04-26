@@ -198,3 +198,18 @@ h3 {
   color: #004E89;
   margin-top: 30px;
 }
+
+.title {
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-top: 50px;
+  color: #004E89;
+  font-size: 48px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.title:hover {
+  color: #ff5722;
+}
