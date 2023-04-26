@@ -3,7 +3,7 @@ export default class FirstComponent extends React.Component <{}> {
   render() {
     return (
       <div>
-        <h1>Create an Account with Us!</h1>
+        <h1>PackageHub</h1>
       </div>
     );
   }
