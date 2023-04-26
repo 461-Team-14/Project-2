@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 
 interface Props {
-  onSubmit: (value: string) => void;
+  onSubmit: (name: string, password: string, isAdmin: boolean) => void;
 }
 
 function InputForm(props: Props) {
-  const [inputValue, setInputValue] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState('');
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     fetch('http://localhost:8080/authenticate', {
       method: 'PUT',
@@ -18,36 +20,66 @@ function InputForm(props: Props) {
       },
       body: JSON.stringify({
         User: {
-          name: inputValue,
-          isAdmin: true
+          name: name,
+          isAdmin: isAdmin
         },
         Secret: {
-          password: "strABDED34@4325Eing"
+          password: password
         }
       })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+      console.log(data);
+      props.onSubmit(name, password, isAdmin);
+      setName('');
+      setPassword('');
+      setMessage('User Registered!');
+    })
     .catch(error => console.error(error))
-    // console.log(response)
-    // const data = await response.json();
-    // props.onSubmit(data.result);
-    setInputValue('');
-    setMessage('Text received!');
+    setPassword('');
+    setMessage('Try a different password! \nPassword must be a strong password.');
     setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
   }
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(event.target.value);
+  function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setName(event.target.value);
+  }
+
+  function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(event.target.value);
+  }
+
+  function handleIsAdminChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setIsAdmin(event.target.checked);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleUser}>
       <input
         type="text"
-        value={inputValue}
-        onChange={handleInputChange}
+        value={name}
+        onChange={handleNameChange}
+        placeholder="Name"
       />
+      <input
+        type="password"
+        value={password}
+        onChange={handlePasswordChange}
+        placeholder="Password"
+        className="file-input"
+      />
+      <div className="admin-wrapper">
+        <label className="admin-label">
+          Admin:
+          <input
+            type="checkbox"
+            checked={isAdmin}
+            onChange={handleIsAdminChange}
+            className="admin-checkbox"
+          />
+        </label>
+      </div>
       <button type="submit">Submit</button>
       {message && <p>{message}</p>}
     </form>
