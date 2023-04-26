@@ -3,7 +3,10 @@ import InputForm from './InputForm';
 import PackageUploadForm from './PackageUploadForm';
 import RegexSearch from './RegexSearch';
 import Reset from './Reset';
+import UpdateID from './UpdateID';
 import DeleteID from './DeleteID';
+import GetName from './GetName';
+import RateID from './RateID';
 import DeleteName from './DeleteName';
 import GetID from './GetID';
 import './App.css';
@@ -42,8 +45,9 @@ function App() {
     setShowResetModal(true);
   }
 
-  function handleUpdatePackage() {
-    console.log('Updating package with ID:', selectedPackageId);
+  function handleUpdatePackage(token: string, ID: string, Name: string, Version: string) {
+    setSelectedPackageId(ID);
+    console.log('Updating package with ID:', selectedPackageId, 'and Name of:', Name);
   }
 
   function handleInteractPackage(token: string, ID: string) {
@@ -54,6 +58,11 @@ function App() {
   function handleDeleteID(token: string, ID: string) {
     setSelectedPackageId(ID);
     console.log('Deleting package with ID:', ID, 'using auth token:', token);
+  }
+
+  function handleRateID(token: string, ID: string) {
+    setSelectedPackageId(ID);
+    console.log('Rating package with ID:', ID, 'using auth token:', token);
   }
 
   function handleDeleteName(token: string, Name: string) {
@@ -92,11 +101,10 @@ function App() {
           // eslint-disable-next-line jsx-a11y/role-supports-aria-props
           <div className="package-menu" role="menu" aria-expanded={showPackageMenu}>
             <ul>
-              <li><GetID onSubmit={handleInteractPackage} /></li>
-              <li><button onClick={handleUpdatePackage} role="menuitem">Update Package</button></li>
+              <li><UpdateID onSubmit={handleUpdatePackage}/></li>
               <li><DeleteID onSubmit={handleDeleteID} /></li>
               <li><DeleteName onSubmit={handleDeleteName} /></li>
-              {/* Add more package manipulation options here */}
+              <li><RateID onSubmit={handleRateID} /></li>
             </ul>
             <button className="close" onClick={() => setShowPackageMenu(false)} aria-label="Close Menu">
               <span aria-hidden="true">&times;</span>
@@ -114,8 +122,9 @@ function App() {
           // eslint-disable-next-line jsx-a11y/role-supports-aria-props
           <div className="search-menu" role="menu" aria-expanded={showSearchMenu}>
             <ul>
+              <li><GetID onSubmit={handleInteractPackage} /></li>
+              <li><GetName onSubmit={handleInteractPackage} /></li>
               <li><RegexSearch onSubmit={handleRegex} /></li>
-              {/* Add more search options here */}
             </ul>
             <button className="close" onClick={() => setShowSearchMenu(false)} aria-label="Close Menu">
               <span aria-hidden="true">&times;</span>
