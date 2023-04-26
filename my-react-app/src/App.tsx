@@ -3,6 +3,7 @@ import InputForm from './InputForm';
 import PackageUploadForm from './PackageUploadForm';
 import RegexSearch from './RegexSearch';
 import Reset from './Reset';
+import Query from './Query';
 import UpdateID from './UpdateID';
 import DeleteID from './DeleteID';
 import GetName from './GetName';
@@ -121,6 +122,7 @@ function App() {
         {showSearchMenu && (
           <div className="search-menu" aria-expanded={showSearchMenu}>
             <ul>
+              <li><Query onSubmit={handleInteractPackage} /></li>
               <li><GetID onSubmit={handleInteractPackage} /></li>
               <li><GetName onSubmit={handleInteractPackage} /></li>
               <li><RegexSearch onSubmit={handleRegex} /></li>
