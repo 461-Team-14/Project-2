@@ -71,35 +71,35 @@ function App() {
 
   return (
     <div className="app-container">
-      <header>
-        <button onClick={() => setShowLoginModal(true)}>Login/Signup</button>
-      </header>
-  
-      {/* Login/Signup Modal */}
-      {showLoginModal && (
-        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
-          <div className="modal-content">
-            <button className="close" onClick={() => setShowLoginModal(false)} aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h2 id="login-modal-title">Login/Signup</h2>
-            <InputForm onSubmit={handleUser} />
-          </div>
+    <header role="banner">
+    <button onClick={() => setShowLoginModal(true)}>Login/Signup</button>
+    </header>
+    
+          {/* Login/Signup Modal */}
+    {showLoginModal && (
+      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+        <div className="modal-content">
+          <button className="close" onClick={() => setShowLoginModal(false)} aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h2 id="login-modal-title">Login/Signup</h2>
+          <InputForm onSubmit={handleUser} />
         </div>
-      )}
-  
-      {/* Package Upload Form */}
-      <h3>Upload A Zipped Package Below.</h3>
+      </div>
+    )}
+
+    {/* Package Upload Form */}
+    <section role="main">
+      <h2>Upload A Zipped Package Below.</h2>
       <PackageUploadForm onSubmit={handlePackageSubmit} />
-  
+
       {/* Package Operations */}
       <div className="button-group">
         <button onClick={handlePackageMenu} aria-expanded={showPackageMenu}>
-          {'Package Operations'}
+          <span role="heading" aria-level={2}>Package Operations</span>
         </button>
         {showPackageMenu && (
-          // eslint-disable-next-line jsx-a11y/role-supports-aria-props
-          <div className="package-menu" role="menu" aria-expanded={showPackageMenu}>
+          <div className="package-menu" aria-expanded={showPackageMenu}>
             <ul>
               <li><UpdateID onSubmit={handleUpdatePackage}/></li>
               <li><DeleteID onSubmit={handleDeleteID} /></li>
@@ -112,15 +112,14 @@ function App() {
           </div>
         )}
       </div>
-  
+
       {/* Search Packages */}
       <div className="button-group">
         <button onClick={handleSearchMenu} aria-expanded={showSearchMenu}>
-          {'Search Packages'}
+          <span role="heading" aria-level={2}>Search Packages</span>
         </button>
         {showSearchMenu && (
-          // eslint-disable-next-line jsx-a11y/role-supports-aria-props
-          <div className="search-menu" role="menu" aria-expanded={showSearchMenu}>
+          <div className="search-menu" aria-expanded={showSearchMenu}>
             <ul>
               <li><GetID onSubmit={handleInteractPackage} /></li>
               <li><GetName onSubmit={handleInteractPackage} /></li>
@@ -132,10 +131,10 @@ function App() {
           </div>
         )}
       </div>
-  
+
       {/* Reset Registry */}
       <button onClick={handleResetRegistry}>Reset Registry</button>
-  
+
       {/* Reset Registry Modal */}
       {showResetModal && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
@@ -147,9 +146,10 @@ function App() {
             <Reset onSubmit={() => setShowResetModal(false)} />
           </div>
         </div>
-      )}
+        )}
+      </section>
     </div>
-  );   
+  );
 }
 
 export default App;
