@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 2.3.0
+  version: 2.3.4
 servers:
 - url: /
 paths:
@@ -75,10 +75,13 @@ paths:
                   value:
                   - Version: 1.2.3
                     Name: Underscore
+                    ID: underscore
                   - Version: 1.2.3-2.1.0
                     Name: Lodash
+                    ID: lodash
                   - Version: ^1.2.3
                     Name: React
+                    ID: react
         "400":
           description: "There is missing field(s) in the PackageQuery/AuthenticationToken\
             \ or it is formed improperly, or the AuthenticationToken is invalid."
@@ -721,21 +724,21 @@ components:
           format: double
         NetScore:
           type: number
-          description: From Part 1
+          description: Scores calculated from other seven metrics.
           format: double
       description: |-
         Package rating (cf. Project 1).
 
         If the Project 1 that you inherited does not support one or more of the original properties, denote this with the value "-1".
       example:
-        GoodPinningPractice: 2.3021358869347654518833223846741020679473876953125
-        NetScore: 9.301444243932575517419536481611430644989013671875
-        PullRequest: 7.061401241503109105224211816675961017608642578125
-        ResponsiveMaintainer: 5.962133916683182377482808078639209270477294921875
-        LicenseScore: 5.63737665663332876420099637471139430999755859375
-        RampUp: 1.46581298050294517310021547018550336360931396484375
-        BusFactor: 0.80082819046101150206595775671303272247314453125
-        Correctness: 6.02745618307040320615897144307382404804229736328125
+        GoodPinningPractice: 2.3021358869347655
+        NetScore: 9.301444243932576
+        PullRequest: 7.061401241503109
+        ResponsiveMaintainer: 5.962133916683182
+        LicenseScore: 5.637376656633329
+        RampUp: 1.4658129805029452
+        BusFactor: 0.8008281904610115
+        Correctness: 6.027456183070403
     PackageHistoryEntry:
       required:
       - Action
