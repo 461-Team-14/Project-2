@@ -190,7 +190,7 @@ exports.packageCreate = function(body, xAuthorization) {
   return new Promise(function(resolve, reject) {
 
     //Validate inputs
-    if (!body || !body.Content || !body.JSProgram || !body.URL) {
+    if (!body || !body.Content || !body.JSProgram) {
       reject({ status: 400, error: 'There is missing field(s) in the PackageData/AuthenticationToken or it is formed improperly.' });
       return;
     }
@@ -204,35 +204,39 @@ exports.packageCreate = function(body, xAuthorization) {
         return;
       }
 
-      //Check if the package exists
+      const decodedContent = Buffer.from(body.Content, 'base64').toString('utf-8');
+      const packageJson = JSON.parse(decodedContent);
+      const Name = packageJson.name;
+      const Version = packageJson.version;
 
-      /*IMPLEMENT LATER*/
+      const regex = /(?:^|\W)([\w-]+\.txt)(?:$|\W)/;
+      const match = decodedContent.match(regex);
+      const ID = match ? match[1] : Name.toLowerCase();
 
-      // if (PackageHandler.packageList.includes(packageData.packageName)) {
-      //   reject({ status: 409, error: 'Package exists already.' });
-      //   return;
-      // }
-
-      //add the package to the list
-      //CALL FUNCTION
-      //PackageHandler.packageList.push(packageData.packageName);
+      // Check if package already exists
+      const existingPackage = PackageHandler.packageList.find(pkg => pkg.metadata.Name === Name && pkg.metadata.Version === Version && pkg.metadata.ID === ID);
+      if (existingPackage) {
+        reject({ status: 409, error: 'Package exists already.' });
+        return;
+      }
 
       // Construct the Package object
       const packageObj = {
         metadata: {
-          Version: "1.0.0",
-          ID: "underscore",
-          Name: "Underscore",
+          Name: Name,
+          Version: Version,
+          ID: ID,
           },
         data: {
           Content: body.Content,
-          JSProgram: body.JSProgram,
-          URL: body.URL,
+          JSProgram: body.JSProgram
         },
       };
 
-    // Return the Package object with status 201
-    resolve({status: 201, packageObj});
+      PackageHandler.packageList.push(packageObj);
+
+      // Return the Package object with status 201
+      resolve({status: 201, packageObj});
 
     } catch (err) {
       reject({ status: 400, error: 'Authentication failed (e.g. AuthenticationToken invalid or does not exist)' });
@@ -240,6 +244,7 @@ exports.packageCreate = function(body, xAuthorization) {
     }
   });
 }
+
 
 
 /**
