@@ -56,15 +56,46 @@ exports.createAuthToken = function(body) {
 /**
  * Delete all versions of this package.
  *
- * name PackageName 
+ * name PackageName
  * xAuthorization AuthenticationToken  (optional)
  * no response value expected for this operation
  **/
-exports.packageByNameDelete = function(name,xAuthorization) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.packageByNameDelete = function (name, xAuthorization) {
+  return new Promise(function (resolve, reject) {
+    // Check if xAuthorization is present and valid
+    if (!xAuthorization || !name) {
+      reject({ status: 400, error: 'There is missing field(s) in the PackageName/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.' });
+      return;
+    }
+
+    try {
+      let decoded = jwt.verify(xAuthorization, 'secret');
+      const user = UserHandler.userList.find(u => u.name === decoded.name && u.token === xAuthorization);
+      if (!user) {
+        reject({ status: 400, error: 'There is missing field(s) in the PackageName/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid. '});
+        return;
+      }
+
+      // Filter the packageList array based on the package name provided
+      let filteredList = PackageHandler.packageList.filter(pkg => pkg.Name === name);
+      if (filteredList.length === 0) {
+        reject({ status: 404, error: 'Package does not exist. '});
+        return;
+      }
+
+      // Remove all versions of the package from packageList
+      filteredList.forEach(pkg => {
+        const index = PackageHandler.packageList.findIndex(p => p.Name === pkg.Name && p.Version === pkg.Version);
+        PackageHandler.packageList.splice(index, 1);
+      });
+      resolve(200);
+    } catch (err) {
+      reject({ status: 400, error: 'There is missing field(s) in the AuthenticationToken or it is formed improperly.' });
+      return;
+    }
   });
 }
+
 
 
 /**
@@ -121,14 +152,14 @@ exports.packageByNameGet = function(name,xAuthorization) {
  **/
 exports.packageByRegExGet = function(body, xAuthorization) {
   return new Promise(function(resolve, reject) {
-    if (!body) {
+    if (!body.RegEx) {
       reject({ status: 400, error: "The regex field is missing in the PackageRegEx." });
       return;
     }
 
     //Filter the packageList array based on the regex provided
     var filteredList = PackageHandler.packageList.filter(function(pkg) {
-      return (new RegExp(body, 'i')).test(pkg.Name) || (pkg.Readme && (new RegExp(body, 'i')).test(pkg.Readme));
+      return (new RegExp(body.RegEx, 'i')).test(pkg.Name) || (pkg.Readme && (new RegExp(body.RegEx, 'i')).test(pkg.Readme));
     });
 
     //Create an array of package objects from the filteredList
@@ -220,7 +251,6 @@ exports.packageCreate = function(body, xAuthorization) {
  **/
 exports.packageDelete = function(id,xAuthorization) {
   return new Promise(function(resolve, reject) {
-    resolve();
   });
 }
 
@@ -362,6 +392,7 @@ exports.registryReset = function(xAuthorization) {
 
       //Delete all users from the user list
       UserHandler.deleteUsers(UserHandler.userList);
+      PackageHandler.deletePackages(PackageHandler.packageList);
       resolve(200);
     } catch (err) {
       reject({ status: 400, error: 'There is missing field(s) in the AuthenticationToken or it is formed improperly.' });
