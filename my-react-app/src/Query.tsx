@@ -13,10 +13,10 @@ function Query(props: Props) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch(`http://localhost:8080/delete`, {
+    fetch(`http://localhost:8080/packages`, {
       method: 'GET',
       headers: {
-        'Authorization': `${token}`,
+        'X-Authorization': `${token}`,
         'offset' : offset
       },
       body: JSON.stringify({

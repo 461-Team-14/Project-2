@@ -11,10 +11,10 @@ function GetID(props: Props) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch(`http://localhost:8080/delete/${ID}`, {
+    fetch(`http://localhost:8080/package/${ID}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `${token}`,
         'id': ID
       },
     })

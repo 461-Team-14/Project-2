@@ -103,9 +103,9 @@ function App() {
           <div className="package-menu" aria-expanded={showPackageMenu}>
             <ul>
               <li><UpdateID onSubmit={handleUpdatePackage}/></li>
+              <li><RateID onSubmit={handleRateID} /></li>
               <li><DeleteID onSubmit={handleDeleteID} /></li>
               <li><DeleteName onSubmit={handleDeleteName} /></li>
-              <li><RateID onSubmit={handleRateID} /></li>
             </ul>
             <button className="close" onClick={() => setShowPackageMenu(false)} aria-label="Close Menu">
               <span aria-hidden="true">&times;</span>

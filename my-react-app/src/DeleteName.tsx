@@ -11,10 +11,10 @@ function DeleteName(props: Props) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch(`http://localhost:8080/delete/${Name}`, {
+    fetch(`http://localhost:8080/package/byName/${Name}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `${token}`,
         'name': Name
       },
     })
