@@ -1,4 +1,21 @@
-const packageList = [];
+const packageList = [  
+  {
+    Version: "1.2.3",
+    Name: "Underscore"
+  },
+  {
+    Version: "1.2.3-2.1.0",
+    Name: "Lodash"
+  },
+  {
+    Version: "^1.2.3",
+    Name: "React"
+  },
+  {
+    Version: "1.2.43",
+    Name: "React"
+  }
+];
 
 module.exports = {
     packageList: packageList,

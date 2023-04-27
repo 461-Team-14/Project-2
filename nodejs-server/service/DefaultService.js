@@ -76,7 +76,7 @@ exports.packageByNameDelete = function (name, xAuthorization) {
         return;
       }
 
-      // Filter the packageList array based on the package name provided
+      //Filter the packageList array based on the package name provided
       let filteredList = PackageHandler.packageList.filter(pkg => pkg.Name === name);
       if (filteredList.length === 0) {
         reject({ status: 404, error: 'Package does not exist. '});
@@ -256,6 +256,27 @@ exports.packageCreate = function(body, xAuthorization) {
  **/
 exports.packageDelete = function(id,xAuthorization) {
   return new Promise(function(resolve, reject) {
+    // Check if xAuthorization is present and valid
+    if (!xAuthorization) {
+      reject({ status: 400, error: 'There is missing field(s) in the PackageID/AuthenticationToken or it is formed improperly, or the AuthenticationToken is invalid.' });
+      return;
+    }
+
+    try {
+      // Check if the package exists
+      const Package = PackageHandler.packageList.find(u => u.ID === id);
+      if (!Package) {
+        reject({ status: 400, error: 'Package does not exist.' });
+        return;
+      }
+
+      //Delete Package
+      PackageHandler.removePackageById(id)
+      resolve(200);
+    } catch (err) {
+      reject({ status: 400, error: 'Package does not exist.' });
+      return;
+    }
   });
 }
 
