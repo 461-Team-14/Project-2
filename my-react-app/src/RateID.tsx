@@ -11,10 +11,11 @@ function RateID(props: Props) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch(`http://localhost:8080/delete/${ID}`, {
+    fetch(`http://localhost:8080/package/${ID}/rate`, {
       method: 'GET',
       headers: {
-        'Authorization': `${token}`
+        'X-Authorization': `${token}`,
+        'id': `${ID}`
       },
     })
       .then(response => response.json())

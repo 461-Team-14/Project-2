@@ -11,10 +11,10 @@ function DeleteID(props: Props) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch(`http://localhost:8080/delete/${ID}`, {
+    fetch(`http://localhost:8080/package/${ID}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `${token}`
       },
     })
       .then(response => response.json())

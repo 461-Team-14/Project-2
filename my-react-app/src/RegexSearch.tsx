@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 
 interface Props {
-  onSubmit: (regex: string) => void;
+  onSubmit: (regex: string, token: string) => void;
 }
 
 function RegexSearch(props: Props) {
   const [regex, setRegex] = useState('');
   const [message, setMessage] = useState('');
+  const [token, setToken] = useState('');
 
   function handleRegexSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch('http://localhost:8080/search', {
+    fetch('http://localhost:8080/package/byRegEx', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Authorization': token
       },
       body: JSON.stringify({
         RegEx: regex,
@@ -23,7 +25,7 @@ function RegexSearch(props: Props) {
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      props.onSubmit(regex);
+      props.onSubmit(regex, token);
       setRegex('');
       setMessage('Regex Received!');
     })
@@ -39,8 +41,18 @@ function RegexSearch(props: Props) {
     setRegex(event.target.value);
   }
 
+  function handleTokenChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToken(event.target.value);
+  }
+
   return (
     <form onSubmit={handleRegexSearch}>
+      <input
+        type="text"
+        value={token}
+        onChange={handleTokenChange}
+        placeholder="Authorization Token"
+      />
       <input
         type="text"
         value={regex}
