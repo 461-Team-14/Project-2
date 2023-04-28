@@ -12,31 +12,37 @@ function InputForm(props: Props) {
 
   function handleUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch('http://localhost:8080/authenticate', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        User: {
-          name: name,
-          isAdmin: isAdmin
-        },
-        Secret: {
-          password: password
-        }
-      })
+    // fetch('http://localhost:8080/authenticate', {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     User: {
+    //       name: name,
+    //       isAdmin: isAdmin
+    //     },
+    //     Secret: {
+    //       password: password
+    //     }
+    //   })
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //   console.log(data);
+    //   props.onSubmit(name, password, isAdmin);
+    //   setName('');
+    //   setPassword('');
+    //   setMessage('User Registered!');
+    // })
+    // .catch(error => console.error(error))
+    fetch('/api/hello', {
+      method: 'PUT'
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      props.onSubmit(name, password, isAdmin);
-      setName('');
-      setPassword('');
-      setMessage('User Registered!');
-    })
-    .catch(error => console.error(error))
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
     setPassword('');
     setMessage('Try a different password! \nPassword must be a strong password.');
     setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
