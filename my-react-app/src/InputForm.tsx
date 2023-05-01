@@ -12,31 +12,39 @@ function InputForm(props: Props) {
 
   function handleUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetch('http://localhost:8080/authenticate', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        User: {
-          name: name,
-          isAdmin: isAdmin
-        },
-        Secret: {
-          password: password
-        }
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      props.onSubmit(name, password, isAdmin);
-      setName('');
-      setPassword('');
-      setMessage('User Registered!');
-    })
-    .catch(error => console.error(error))
+    fetch('https://backend-382721.ue.r.appspot.com/hello')
+  .then(response => response.text())
+  .then(data => {
+    console.log(data); // 'Hello, world!'
+  })
+  .catch(error => {
+    console.error(error);
+  });
+    // fetch('http://localhost:8080/authenticate', {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     User: {
+    //       name: name,
+    //       isAdmin: isAdmin
+    //     },
+    //     Secret: {
+    //       password: password
+    //     }
+    //   })
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //   console.log(data);
+    //   props.onSubmit(name, password, isAdmin);
+    //   setName('');
+    //   setPassword('');
+    //   setMessage('User Registered!');
+    // })
+    // .catch(error => console.error(error))
     setPassword('');
     setMessage('Try a different password! \nPassword must be a strong password.');
     setTimeout(() => setMessage(''), 2000); // clear message after 2 seconds
